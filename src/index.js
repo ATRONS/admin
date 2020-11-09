@@ -1,17 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+/* eslint-disable global-require */
+import './assets/css/vendor/bootstrap.min.css';
+import './assets/css/vendor/bootstrap.rtl.only.min.css';
+import 'react-circular-progressbar/dist/styles.css';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-image-lightbox/style.css';
+import 'video.js/dist/video-js.css';
+import {
+  isMultiColorActive,
+  defaultColor,
+  isDarkSwitchActive,
+} from './constants/defaultValues';
+import { getCurrentColor, setCurrentColor } from './helpers/Utils';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const color = (isMultiColorActive || isDarkSwitchActive) ? getCurrentColor() : defaultColor;
+setCurrentColor(color);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const render = () => {
+  import(`./assets/css/sass/themes/gogo.${color}.scss`).then(() => {
+    require('./AppRenderer');
+  });
+};
+render();
