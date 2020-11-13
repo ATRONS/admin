@@ -3,6 +3,7 @@ import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AppLayout';
+import { AddNewAuthor } from './resource-providers/AddNewAuthor';
 // import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
 
 const Gogo = React.lazy(() =>
@@ -14,6 +15,9 @@ const SecondMenu = React.lazy(() =>
 const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './blank-page')
 );
+
+const ResourceProviders = React.lazy(() => import('./resource-providers'));
+const Materials = React.lazy(() => import('./materials'));
 
 const App = ({ match }) => {
   return (
@@ -30,6 +34,17 @@ const App = ({ match }) => {
               path={`${match.url}/second-menu`}
               render={(props) => <SecondMenu {...props} />}
             />
+
+            <Route
+              path={`${match.url}/resource-providers`}
+              render={(props) => <ResourceProviders {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/materials`}
+              render={(props) => <Materials {...props} />}
+            />
+
             {/* <ProtectedRoute
                     path={`${match.url}/second-menu`}
                     component={SecondMenu}
