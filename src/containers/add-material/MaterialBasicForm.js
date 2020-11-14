@@ -28,20 +28,25 @@ const MaterialBasicSchema = Yup.object().shape({
   file: Yup.object().nullable().required('Material file is required'),
 });
 
-const MaterialBasicForm = ({ innerRef, intl }) => {
-  const [selectedOption, setSelectedOption] = useState('');
+const MaterialBasicForm = ({
+  innerRef,
+  intl,
+  onFormSubmitted,
+  initialValues,
+}) => {
   const [file, setFile] = useState(null);
   const { messages } = intl;
 
+  console.log('Why is that', initialValues);
   return (
     <div className="wizard-basic-step">
       <Formik
         innerRef={innerRef}
         initialValues={{
-          type: '',
-          file: { some: 1 },
+          type: initialValues.type || '',
+          file: initialValues.file || null,
         }}
-        onSubmit={() => {}}
+        onSubmit={onFormSubmitted}
         validationSchema={MaterialBasicSchema}
       >
         {({ values, errors, touched, setFieldTouched, setFieldValue }) => (
@@ -67,7 +72,7 @@ const MaterialBasicForm = ({ innerRef, intl }) => {
 
             <FormGroup>
               <Label>{messages['forms.select-file']}</Label>
-              <MaterialDropZone onChange={setFieldValue} />
+              <MaterialDropZone name="file" onChange={setFieldValue} />
               {errors.file && touched.file && (
                 <div className="invalid-feedback d-block">{errors.file}</div>
               )}
