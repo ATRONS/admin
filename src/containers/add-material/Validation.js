@@ -1,90 +1,26 @@
 /* eslint-disable no-param-reassign */
 import React, { createRef, useState } from 'react';
-import {
-  Card,
-  CardBody,
-  CustomInput,
-  FormGroup,
-  Label,
-  Row,
-  Spinner,
-} from 'reactstrap';
+import { Card, CardBody, Row, Spinner } from 'reactstrap';
 import { Wizard, Steps, Step } from 'react-albus';
 import { injectIntl } from 'react-intl';
-import { Formik, Form, Field } from 'formik';
 import IntlMessages from '../../helpers/IntlMessages';
 import BottomNavigation from '../../components/wizard/BottomNavigation';
 import TopNavigation from '../../components/wizard/TopNavigation';
-import CustomSelectInput from '../../components/common/CustomSelectInput';
 import { Colxx } from '../../components/common/CustomBootstrap';
-import Select from 'react-select';
-import MaterialDropZone from './MaterialDropZone';
-import DatePicker from 'react-datepicker';
-import { FormikReactSelect } from '../resource-providers/FormikFields';
 import MaterialBasicForm from './MaterialBasicForm';
 import MaterialDetailedForm from './MaterialDetailedForm';
-
-const selectData = [
-  { label: 'Book', value: 'cake', key: 0 },
-  { label: 'Newspaper', value: 'cupcake', key: 1 },
-  { label: 'Magazine', value: 'dessert', key: 2 },
-];
-
-const validateEmail = (value) => {
-  let error;
-  if (!value) {
-    error = 'Please enter your email address';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-    error = 'Invalid email address';
-  }
-  return error;
-};
-
-const validateName = (value) => {
-  let error;
-  if (!value) {
-    error = 'Please enter your name';
-  } else if (value.length < 2) {
-    error = 'Value must be longer than 2 characters';
-  }
-  return error;
-};
-
-const validatePassword = (value) => {
-  let error;
-  if (!value) {
-    error = 'Please enter your password';
-  } else if (value.length < 6) {
-    error = 'Password must be longer than 6 characters';
-  }
-  return error;
-};
+import MaterialPricingForm from './MaterialPricingForm';
 
 const Validation = ({ intl }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [fields, setFields] = useState([
-    {
-      valid: false,
-      name: 'name',
-      value: '',
-    },
-    {
-      valid: false,
-      name: 'email',
-      value: '',
-    },
-    {
-      valid: false,
-      name: 'password',
-      value: '',
-    },
-  ]);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [fields, setFields] = useState([]);
+  const [] = useState('');
 
   // step 2 related
-  const [startDate, setStartDate] = useState(new Date());
+  const [] = useState(new Date());
+  const [nextHandler, setNextHandler] = useState(null);
 
   const asyncLoading = () => {
     setLoading(true);
@@ -93,32 +29,38 @@ const Validation = ({ intl }) => {
     }, 3000);
   };
 
+  const submitMaterialData = (data) => {
+    console.log('Final data', data);
+    asyncLoading();
+  };
+
+  const onStepFormSubmitted = (values) => {
+    const { goToNext, steps, step } = nextHandler;
+    const stepIndex = steps.indexOf(step);
+    // values.type = values.type.value;
+    goToNext();
+    step.isDone = true;
+    if (steps.length - 2 <= steps.indexOf(step)) {
+      let newValues = { ...fields[0], ...fields[1], ...values };
+      setBottomNavHidden(true);
+      submitMaterialData(newValues);
+    }
+    const newFields = [...fields];
+    newFields[stepIndex] = values;
+    setFields(newFields);
+  };
+
   const onClickNext = (goToNext, steps, step) => {
     if (steps.length - 1 <= steps.indexOf(step)) {
       return;
     }
     const formIndex = steps.indexOf(step);
     const form = forms[formIndex].current;
-    const { name } = fields[formIndex];
+    setNextHandler({ goToNext, steps, step });
 
-    form.submitForm().then(() => {
-      const newFields = [...fields];
+    console.log('form', formIndex);
 
-      newFields[formIndex].value = form.values[name];
-      newFields[formIndex].valid = !form.errors[name];
-      setFields(newFields);
-
-      console.log('henok', form.values);
-
-      if (formIndex == 0) {
-        goToNext();
-        step.isDone = true;
-        if (steps.length - 2 <= steps.indexOf(step)) {
-          setBottomNavHidden(true);
-          asyncLoading();
-        }
-      }
-    });
+    form.submitForm(goToNext);
   };
 
   const onClickPrev = (goToPrev, steps, step) => {
@@ -129,6 +71,7 @@ const Validation = ({ intl }) => {
   };
 
   const { messages } = intl;
+  console.log('Way way', fields);
   return (
     <Row>
       <Colxx xxs="12" xl="6" className="mb-5">
@@ -142,71 +85,37 @@ const Validation = ({ intl }) => {
                   name={messages['wizard.am-step-name-1']}
                   desc={messages['wizard.am-step-desc-1']}
                 >
-                  <MaterialBasicForm innerRef={forms[0]} />
+                  <MaterialBasicForm
+                    innerRef={forms[0]}
+                    onFormSubmitted={onStepFormSubmitted}
+                    initialValues={fields[0] || {}}
+                  />
                 </Step>
                 <Step
                   id="step2"
                   name={messages['wizard.am-step-name-2']}
                   desc={messages['wizard.am-step-desc-2']}
                 >
-                  <MaterialDetailedForm innerRef={forms[1]} />
+                  <MaterialDetailedForm
+                    innerRef={forms[1]}
+                    onFormSubmitted={onStepFormSubmitted}
+                    initialValues={fields[1] || {}}
+                    materialType={fields[0] ? fields[0].type.value : ''}
+                  />
                 </Step>
+
                 <Step
                   id="step3"
                   name={messages['wizard.am-step-name-3']}
                   desc={messages['wizard.am-step-desc-3']}
                 >
-                  <div className="wizard-basic-step">
-                    <Formik
-                      innerRef={forms[2]}
-                      initialValues={{
-                        password: fields[2].value,
-                      }}
-                      onSubmit={() => {}}
-                    >
-                      {({ errors, touched }) => (
-                        <Form className="av-tooltip tooltip-label-right error-l-75">
-                          <FormGroup>
-                            <CustomInput
-                              type="checkbox"
-                              id="exCustomCheckbox"
-                              label="It is free"
-                            />
-                          </FormGroup>
-                          <>
-                            <FormGroup>
-                              <Label>{messages['forms.selling-price']}</Label>
-                              <Field
-                                className="form-control"
-                                name="selling-price"
-                                type="number"
-                              />
-                              {errors.email && touched.email && (
-                                <div className="invalid-feedback d-block">
-                                  {errors.email}
-                                </div>
-                              )}
-                            </FormGroup>
-
-                            <FormGroup>
-                              <Label>{messages['forms.selling-price']}</Label>
-                              <Field
-                                className="form-control"
-                                name="selling-price"
-                                type="number"
-                              />
-                              {errors.email && touched.email && (
-                                <div className="invalid-feedback d-block">
-                                  {errors.email}
-                                </div>
-                              )}
-                            </FormGroup>
-                          </>
-                        </Form>
-                      )}
-                    </Formik>
-                  </div>
+                  <MaterialPricingForm
+                    innerRef={forms[2]}
+                    onFormSubmitted={onStepFormSubmitted}
+                    initialValues={fields[2] || {}}
+                  />
                 </Step>
+
                 <Step id="step4" hideTopNav>
                   <div className="wizard-basic-step text-center pt-3">
                     {loading ? (
