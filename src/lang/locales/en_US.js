@@ -151,8 +151,8 @@ module.exports = {
   'wizard.am-step-name-2': 'Step 2',
   'wizard.am-step-name-3': 'Step 3',
   'wizard.am-step-desc-1': 'Upload the file',
-  'wizard.am-step-desc-2': 'Second step description',
-  'wizard.am-step-desc-3': 'Third step description',
+  'wizard.am-step-desc-2': 'Material detials',
+  'wizard.am-step-desc-3': 'Material Pricing',
   'wizard.content-1': 'Step content for first step.',
   'wizard.content-2': 'Step content for second step.',
   'wizard.content-3': 'Last step content!',
@@ -160,6 +160,7 @@ module.exports = {
   'wizard.next': 'Next',
   'wizard.prev': 'Back',
   'wizard.registered': 'Your registration completed successfully!',
+  'wizard.material-added': 'Your material has been added successfully!',
   'wizard.async': 'Async save for 3 seconds!',
 
   'forms.basic': 'Basic',
@@ -217,4 +218,5 @@ module.exports = {
   'forms.edition': 'Edition',
   'forms.selling-price': 'Selling Price',
   'forms.renting-price': 'Renting Price',
+  'forms.it-free': 'It is free',
 };
