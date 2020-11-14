@@ -13,11 +13,12 @@ const dropzoneConfig = (onChange) => ({
   maxFilesize: 3,
   success: (data) => {
     console.log(data);
-    onChange({});
+    onChange(data.upload);
   },
-  complete: (data) => {
-    console.log('comp', data);
-  },
+  // complete: (data) => {
+  //   console.log('comp', data.upload);
+  //   onChange(data);
+  // },
   // removedfile: () => {
   //   // onChange({});
   //   return true;
@@ -71,7 +72,9 @@ export default class MaterialDropZone extends Component {
   }
 
   render() {
-    const config = dropzoneConfig(this.props.onChange);
+    const config = dropzoneConfig((data) =>
+      this.props.onChange(this.props.name, data)
+    );
     return (
       <DropzoneComponent
         config={dropzoneComponentConfig}
