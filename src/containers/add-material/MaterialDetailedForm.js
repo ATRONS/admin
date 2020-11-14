@@ -17,14 +17,20 @@ const selectData = [
 const MaterialDetailSchema = Yup.object().shape({
   title: Yup.string().required('Please select one of the options'),
   subtitle: Yup.string().notRequired().max(50, "Can't exceed 50 characters"),
-  cover_img_url: Yup.string().required('Cover image is required'),
+  cover_img_url: Yup.object().nullable().required('Cover image is required'),
   published_date: Yup.date().nullable().required('Published date is required'),
   display_date: Yup.date().notRequired().nullable(),
   pages: Yup.number().required('Number of pages is required'),
   edition: Yup.number().required('Edition number is required'),
 });
 
-const MaterialDetailedForm = ({ innerRef, intl }) => {
+const MaterialDetailedForm = ({
+  innerRef,
+  intl,
+  initialValues,
+  onFormSubmitted,
+  materialType,
+}) => {
   const { messages } = intl;
 
   return (
@@ -32,19 +38,19 @@ const MaterialDetailedForm = ({ innerRef, intl }) => {
       <Formik
         innerRef={innerRef}
         initialValues={{
-          title: '',
-          subtitle: '',
-          cover_img_url: '',
-          published_date: null,
-          display_date: '',
-          ISBN: '',
-          synopsis: '',
-          review: '',
-          tags: [],
-          pages: '',
-          edition: '',
+          title: initialValues.title || '',
+          subtitle: initialValues.subtitle || '',
+          cover_img_url: initialValues.cover_img_url || null,
+          published_date: initialValues.published_date || null,
+          display_date: initialValues.display_date || '',
+          ISBN: initialValues.ISBN || '',
+          synopsis: initialValues.synopsis || '',
+          review: initialValues.review || '',
+          tags: initialValues.tags || [],
+          pages: initialValues.pages || '',
+          edition: initialValues.edition || '',
         }}
-        onSubmit={() => {}}
+        onSubmit={onFormSubmitted}
         validationSchema={MaterialDetailSchema}
       >
         {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
@@ -69,7 +75,7 @@ const MaterialDetailedForm = ({ innerRef, intl }) => {
 
             <FormGroup>
               <Label>{messages['forms.cover-image']}</Label>
-              <MaterialDropZone />
+              <MaterialDropZone name="cover_img_url" onChange={setFieldValue} />
               {errors.cover_img_url && touched.cover_img_url && (
                 <div className="invalid-feedback d-block">
                   {errors.cover_img_url}
@@ -98,20 +104,22 @@ const MaterialDetailedForm = ({ innerRef, intl }) => {
                 <div className="invalid-feedback d-block">{errors.ISBN}</div>
               )}
             </FormGroup>
-            <FormGroup>
-              <Label>{messages['forms.synopsis']}</Label>
-              <Field
-                className="form-control"
-                name="synopsis"
-                component="textarea"
-              />
+            {materialType === 'book' && (
+              <FormGroup>
+                <Label>{messages['forms.synopsis']}</Label>
+                <Field
+                  className="form-control"
+                  name="synopsis"
+                  component="textarea"
+                />
 
-              {errors.synopsis && touched.synopsis && (
-                <div className="invalid-feedback d-block">
-                  {errors.synopsis}
-                </div>
-              )}
-            </FormGroup>
+                {errors.synopsis && touched.synopsis && (
+                  <div className="invalid-feedback d-block">
+                    {errors.synopsis}
+                  </div>
+                )}
+              </FormGroup>
+            )}
             <FormGroup>
               <Label>{messages['forms.tags']}</Label>
               <FormikReactSelect
