@@ -3,23 +3,15 @@ import {
   Row,
   Card,
   CardBody,
-  Nav,
-  NavItem,
-  Button,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownItem,
   DropdownMenu,
-  TabContent,
-  TabPane,
-  Badge,
-  CardTitle,
   CardSubtitle,
   CardText,
   CardImg,
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-import classnames from 'classnames';
 import Breadcrumb from '../../../../containers/navs/Breadcrumb';
 import {
   Colxx,
@@ -27,16 +19,12 @@ import {
 } from '../../../../components/common/CustomBootstrap';
 import IntlMessages from '../../../../helpers/IntlMessages';
 import SingleLightbox from '../../../../components/pages/SingleLightbox';
-import recentPostsData from '../../../../data/recentposts';
-import RecentPost from '../../../../components/common/RecentPost';
 import productData from '../../../../data/products';
-import UserCardBasic from '../../../../components/cards/UserCardBasic';
-import friendsData from '../../../../data/follow';
 
 const products = productData.slice(0, 15);
 
 const AuthorProfile = ({ match }) => {
-  const [activeTab, setActiveTab] = useState('details');
+  const [] = useState('details');
 
   return (
     <>
