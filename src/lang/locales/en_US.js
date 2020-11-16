@@ -141,7 +141,11 @@ module.exports = {
   'pages.foundOn': 'Established on',
 
   'pages.books': 'Books',
-  'pages.search-material': 'Search books with title, ISBN and author',
+  'pages.magazines': 'Magazines',
+  'pages.newspaper': 'Newspapers',
+  'pages.search-books': 'Search books with title, ISBN and author',
+  'pages.search-magazines': 'Search magazines with title, and company name',
+  'pages.comments': 'Comments',
 
   // page 06 - modals
   'modal.comfirmation': 'Comfirmation',
@@ -222,4 +226,6 @@ module.exports = {
   'forms.selling-price': 'Selling Price',
   'forms.renting-price': 'Renting Price',
   'forms.it-free': 'It is free',
+  'forms.uploaded-on': 'Uploaded On',
+  'forms.language': 'Language',
 };
