@@ -17,6 +17,7 @@ function MyTable({
   fetchData,
   loading,
   intl,
+  searchPlaceholder,
 }) {
   const {
     getTableProps,
@@ -81,7 +82,7 @@ function MyTable({
         <Input
           name="searchKeyword"
           id="searchKeyword"
-          placeholder={messages['pages.search-material']}
+          placeholder={messages[searchPlaceholder]}
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
           onKeyPress={(e) => handleSearchInputKeyPress(e)}
@@ -117,7 +118,7 @@ function MyTable({
           ))}
         </thead>
 
-        <tbody {...getTableBodyProps()} className="henok">
+        <tbody {...getTableBodyProps()}>
           {loading && <div className="loading" />}
 
           {page.map((row) => {
