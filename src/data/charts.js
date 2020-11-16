@@ -175,7 +175,7 @@ export const smallChartData1 = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   datasets: [
     {
-      label: 'Total Orders',
+      label: 'Total Sells',
       borderColor: colors.themeColor1,
       pointBorderColor: colors.themeColor1,
       pointHoverBackgroundColor: colors.themeColor1,
@@ -185,7 +185,7 @@ export const smallChartData1 = {
       pointHoverRadius: 2,
       fill: false,
       borderWidth: 2,
-      data: [1250, 1300, 1550, 921, 1810, 1106, 1610],
+      data: [120, 0, 220, 140, 0, 0, 500],
       datalabels: {
         align: 'end',
         anchor: 'end',
