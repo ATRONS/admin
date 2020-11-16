@@ -140,6 +140,9 @@ module.exports = {
   'pages.birthDate': 'Birth date',
   'pages.foundOn': 'Established on',
 
+  'pages.books': 'Books',
+  'pages.search-material': 'Search books with title, ISBN and author',
+
   // page 06 - modals
   'modal.comfirmation': 'Comfirmation',
 
