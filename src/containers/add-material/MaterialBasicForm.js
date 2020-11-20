@@ -57,9 +57,9 @@ const MaterialBasicForm = ({
                 <Colxx xxs="12" xl="6">
                   <FormikReactSelect
                     name="type"
-                    value={values.type}
+                    value={selectData.find(val => val.value ==values.type)}
                     options={selectData}
-                    onChange={setFieldValue}
+                    onChange={(name, data) => setFieldValue(name, data.value)}
                     onBlur={setFieldTouched}
                   />
                 </Colxx>
