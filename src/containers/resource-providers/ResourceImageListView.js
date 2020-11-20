@@ -8,14 +8,14 @@ const ResourceImageListView = ({ resource }) => {
     <Colxx
       xxs="12"
       lg="6"
-      xl="4"
-      className="mb-4"
+      xl="3"
+      className="mb-2"
       key={`resource_${resource.id}`}
     >
       <Card>
         <div className="position-relative">
           <NavLink to="#" location={{}} className="w-40 w-sm-100">
-            <CardImg top alt={resource.title} src={resource.img} />
+            <CardImg top alt={resource.title} src={resource.cover_img_url} />
           </NavLink>
         </div>
         <CardBody>
@@ -23,7 +23,7 @@ const ResourceImageListView = ({ resource }) => {
             <CardSubtitle>{resource.title}</CardSubtitle>
           </NavLink>
           <CardText className="text-muted text-small mb-0 font-weight-light">
-            {resource.createDate}
+            {resource.display_date}
           </CardText>
         </CardBody>
       </Card>
