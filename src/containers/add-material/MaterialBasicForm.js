@@ -8,7 +8,7 @@ import Select from 'react-select';
 import MaterialDropZone from './MaterialDropZone';
 import { injectIntl } from 'react-intl';
 import * as Yup from 'yup';
-import { FormikReactSelect } from '../resource-providers/FormikFields';
+import { FormikReactSelect } from '../common/FormikFields';
 
 const selectData = [
   { label: 'Book', value: 'book', key: 0 },
@@ -57,7 +57,7 @@ const MaterialBasicForm = ({
                 <Colxx xxs="12" xl="6">
                   <FormikReactSelect
                     name="type"
-                    value={selectData.find(val => val.value ==values.type)}
+                    value={selectData.find((val) => val.value == values.type)}
                     options={selectData}
                     onChange={(name, data) => setFieldValue(name, data.value)}
                     onBlur={setFieldTouched}
