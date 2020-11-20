@@ -17,7 +17,7 @@ const selectData = [
 const MaterialDetailSchema = Yup.object().shape({
   title: Yup.string().required('Please select one of the options'),
   subtitle: Yup.string().notRequired().max(50, "Can't exceed 50 characters"),
-  cover_img_url: Yup.object().nullable().required('Cover image is required'),
+  cover_img_url: Yup.string().required('Cover image is required'),
   published_date: Yup.date().nullable().required('Published date is required'),
   display_date: Yup.date().notRequired().nullable(),
   pages: Yup.number().required('Number of pages is required'),
@@ -30,6 +30,7 @@ const MaterialDetailedForm = ({
   initialValues,
   onFormSubmitted,
   materialType,
+  tags
 }) => {
   const { messages } = intl;
 
@@ -40,7 +41,7 @@ const MaterialDetailedForm = ({
         initialValues={{
           title: initialValues.title || '',
           subtitle: initialValues.subtitle || '',
-          cover_img_url: initialValues.cover_img_url || null,
+          cover_img_url: initialValues.cover_img_url || '',
           published_date: initialValues.published_date || null,
           display_date: initialValues.display_date || '',
           ISBN: initialValues.ISBN || '',
@@ -53,7 +54,10 @@ const MaterialDetailedForm = ({
         onSubmit={onFormSubmitted}
         validationSchema={MaterialDetailSchema}
       >
-        {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
+        {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
+          console.log(values, errors)
+          return (
+          
           <Form className="av-tooltip tooltip-label-right">
             <FormGroup>
               <Label>{messages['forms.title']}</Label>
@@ -75,7 +79,7 @@ const MaterialDetailedForm = ({
 
             <FormGroup>
               <Label>{messages['forms.cover-image']}</Label>
-              <MaterialDropZone name="cover_img_url" onChange={setFieldValue} />
+              <MaterialDropZone name="cover_img_url" onChange={(name, data) => setFieldValue('cover_img_url', data.url)} />
               {errors.cover_img_url && touched.cover_img_url && (
                 <div className="invalid-feedback d-block">
                   {errors.cover_img_url}
@@ -125,7 +129,7 @@ const MaterialDetailedForm = ({
               <FormikReactSelect
                 name="tags"
                 value={values.tags}
-                options={selectData}
+                options={tags}
                 isMulti
                 onChange={setFieldValue}
                 onBlur={setFieldTouched}
@@ -153,7 +157,9 @@ const MaterialDetailedForm = ({
               )}
             </FormGroup>
           </Form>
-        )}
+        )
+              }
+      }
       </Formik>
     </div>
   );
