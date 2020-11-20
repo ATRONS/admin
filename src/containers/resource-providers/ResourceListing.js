@@ -3,7 +3,7 @@ import { Row } from 'reactstrap';
 import Pagination from './Pagination';
 import ResourceImageListView from './ResourceImageListView';
 
-const ResourceListing = ({
+const ResourceListing =   ({
   providers,
   currentPage,
   totalPage,
@@ -14,11 +14,13 @@ const ResourceListing = ({
       {providers.map((provider) => {
         return <ResourceImageListView key={provider.id} resource={provider} />;
       })}
-      <Pagination
-        currentPage={currentPage}
-        totalPage={totalPage}
-        onChangePage={(i) => onChangePage(i)}
-      />
+      {totalPage > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPage={totalPage}
+          onChangePage={(i) => onChangePage(i)}
+        />
+      )}
     </Row>
   );
 };
