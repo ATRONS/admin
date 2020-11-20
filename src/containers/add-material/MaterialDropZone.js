@@ -2,18 +2,22 @@
 import React, { Component } from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import 'dropzone/dist/min/dropzone.min.css';
+import urls from '../../services/api/urls';
 
 const ReactDOMServer = require('react-dom/server');
 
 const dropzoneComponentConfig = {
-  postUrl: 'https://httpbin.org/post',
+  postUrl: urls.uploadMaterial,
 };
 const dropzoneConfig = (onChange) => ({
   thumbnailHeight: 160,
   maxFilesize: 3,
-  success: (data) => {
-    console.log(data);
-    onChange(data.upload);
+  paramName: 'material',
+  success: (data, response) => {
+    console.log(response);
+    if (response.success) {
+    onChange(response.data);
+    }
   },
   // complete: (data) => {
   //   console.log('comp', data.upload);
