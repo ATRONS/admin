@@ -26,7 +26,7 @@ const ProviderListing = ({
         if (providerType === 'author') {
           return (
             <AuthorThumbListView
-              key={provider.id}
+              key={provider._id}
               author={provider}
               isSelect={selectedItems.includes(provider.id)}
               collect={collect}
@@ -36,7 +36,7 @@ const ProviderListing = ({
         } else {
           return (
             <CompanyListView
-              key={provider.id}
+              key={provider._id}
               company={provider}
               isSelect={selectedItems.includes(provider.id)}
               collect={collect}
