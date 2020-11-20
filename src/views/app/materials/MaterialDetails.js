@@ -32,6 +32,8 @@ import { books_dummy } from '../../../data/book';
 import { SmallLineChart } from '../../../components/charts';
 import NewComments from '../../../containers/dashboard/NewComments';
 import BasicDetailsPane from '../../../containers/resource-providers/BasicDetailsPane';
+import apiMaterials from '../../../services/api/materials';
+import urls from '../../../services/api/urls';
 
 const MaterialDetails = ({ match, intl, type }) => {
   const [activeTab, setActiveTab] = useState('details');
@@ -39,10 +41,15 @@ const MaterialDetails = ({ match, intl, type }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setDetails(books_dummy[0]);
-      setLoading(false);
-    }, 1000);
+    const id = match.params.id;
+    apiMaterials.getSingle(id).then((res) => {
+      if (res.success) {
+        const data = res.data.material;
+        data.cover_img_url = urls.MAIN_URL + data.cover_img_url;
+        setDetails(data);
+        setLoading(false);
+      }
+    });
   }, []);
 
   return (
@@ -88,7 +95,7 @@ const MaterialDetails = ({ match, intl, type }) => {
               <Colxx xxs="12" lg="4" className="mb-4">
                 <Card className="mb-4">
                   <img
-                    src="/assets/img/details/1.jpg"
+                    src={details.cover_img_url || '/assets/img/details/1.jpg'}
                     alt="Detail"
                     className="card-img-top"
                   />
