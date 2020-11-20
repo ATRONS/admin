@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { Row, Card, CardBody, FormGroup, Label, Button } from 'reactstrap';
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
-import { FormikDatePicker } from '../../../containers/resource-providers/FormikFields';
+import { FormikDatePicker } from '../../../containers/common/FormikFields';
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
