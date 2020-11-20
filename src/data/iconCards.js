@@ -1,15 +1,18 @@
 const data = [
-  { title: 'dashboards.pending-orders', icon: 'iconsminds-clock', value: 14 },
   {
-    title: 'dashboards.completed-orders',
+    title: 'dashbaord.available_amount',
     icon: 'iconsminds-basket-coins',
-    value: 32,
+    value: 'ETB 74',
   },
   {
-    title: 'dashboards.refund-requests',
+    title: 'dashbaord.total_amount',
     icon: 'iconsminds-arrow-refresh',
-    value: 74,
+    value: 'ETB 74',
   },
-  { title: 'dashboards.new-comments', icon: 'iconsminds-mail-read', value: 25 },
+  {
+    title: 'dashbaord.total_books',
+    icon: 'iconsminds-mail-read',
+    value: 'ETB 74',
+  },
 ];
 export default data;
