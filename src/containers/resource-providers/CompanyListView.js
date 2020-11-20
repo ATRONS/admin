@@ -6,8 +6,8 @@ import { ContextMenuTrigger } from 'react-contextmenu';
 import { Colxx } from '../../components/common/CustomBootstrap';
 
 const CompanyListView = ({ company, isSelect, collect, onCheckItem }) => {
-  const companyProfileUrl = 'companies/' + company.id;
-
+  const companyProfileUrl = 'companies/' + company._id;
+  console.log('hoy', company);
   return (
     <Colxx xxs="12" key={company.id} className="mb-3">
       <ContextMenuTrigger id="menu_id" data={company.id} collect={collect}>
@@ -28,7 +28,7 @@ const CompanyListView = ({ company, isSelect, collect, onCheckItem }) => {
             <div className="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
               <NavLink to={companyProfileUrl} className="w-40 w-sm-100">
                 <p className="list-item-heading mb-1 truncate">
-                  {company.legal_name}
+                  {company.legal_name || company.display_name}
                 </p>
               </NavLink>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
