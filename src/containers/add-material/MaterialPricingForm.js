@@ -41,11 +41,13 @@ const MaterialPricingForm = ({
         }}
         onSubmit={(values) => {
           onFormSubmitted({
-            free: values.free,
-            selling: values.selling,
-            rent: {
-              value: values.renting,
-              per: 1,
+            price: {
+              free: values.free,
+              selling: values.selling || 0,
+              rent: {
+                value: values.renting || 0,
+                per: 1,
+              },
             },
           });
         }}
