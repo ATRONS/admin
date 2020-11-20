@@ -1,5 +1,5 @@
-const BASE_URL = 'http://10.6.220.250:5000/api/v1/admin';
-
+const BASE_URL = 'http://192.168.0.27:5000/api/v1/admin';
 const books = 'books/';
+const uploadMaterial = BASE_URL + '/upload/material'
 
-export default { BASE_URL, books };
+export default { BASE_URL, books, uploadMaterial };
