@@ -9,6 +9,7 @@ import { Card, CardBody } from 'reactstrap';
 import products from '../../../data/products';
 import { NavLink } from 'react-router-dom';
 import MyTable from '../../../containers/materials/common-table';
+import apiMagazines from '../../../services/api/magazines';
 
 const Magazines = ({ match }) => {
   const [] = useState('');
@@ -27,13 +28,16 @@ const Magazines = ({ match }) => {
         if (fetchId === fetchIdRef.current) {
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
-          let newProducts = products.filter((product) =>
+
+          // apiMagazines.getAll({ startRow, pageSize, searchKeyword });
+
+          let newMagazines = products.filter((product) =>
             product.title
               .toLocaleLowerCase()
               .includes(searchKeyword.toLocaleLowerCase())
           );
-          setBooks(newProducts.slice(startRow, endRow));
-          setPageCount(Math.ceil(newProducts.length / pageSize));
+          setBooks(newMagazines.slice(startRow, endRow));
+          setPageCount(Math.ceil(newMagazines.length / pageSize));
           setLoading(false);
         }
       }, 1000);
