@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Colxx } from '../../components/common/CustomBootstrap';
 
 const ResourceImageListView = ({ resource }) => {
+  console.log('henok', resource);
   return (
     <Colxx
       xxs="12"
@@ -15,7 +16,12 @@ const ResourceImageListView = ({ resource }) => {
       <Card>
         <div className="position-relative">
           <NavLink to="#" location={{}} className="w-40 w-sm-100">
-            <CardImg top alt={resource.title} src={resource.cover_img_url} />
+            <CardImg
+              top
+              alt={resource.title}
+              src={resource.cover_img_url}
+              style={{ maxHeight: '160px' }}
+            />
           </NavLink>
         </div>
         <CardBody>
