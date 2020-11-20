@@ -1,14 +1,16 @@
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row } from 'reactstrap';
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import { injectIntl } from 'react-intl';
 import { Card, CardBody } from 'reactstrap';
 
-import products from '../../../data/products';
 import { NavLink } from 'react-router-dom';
 import MyTable from '../../../containers/materials/common-table';
+import { books_dummy } from '../../../data/book';
+import { loadAll } from '../../../services/api/materials';
+import { apiBooks } from '../../../services/api';
 
 const Books = ({ match }) => {
   const [] = useState('');
@@ -22,16 +24,20 @@ const Books = ({ match }) => {
       console.log('Fetching');
       const fetchId = ++fetchIdRef.current;
       setLoading(true);
+      // loadAll();
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
-          let newProducts = products.filter((product) =>
-            product.title.toLocaleLowerCase().includes(searchKeyword)
+          // apiBooks.getAll({ startRow, pageSize, searchKeyword });
+          let newBooks = books_dummy.filter((book) =>
+            book.title
+              .toLocaleLowerCase()
+              .includes(searchKeyword.toLocaleLowerCase())
           );
-          setBooks(newProducts.slice(startRow, endRow));
-          setPageCount(Math.ceil(newProducts.length / pageSize));
+          setBooks(newBooks.slice(startRow, endRow));
+          setPageCount(Math.ceil(newBooks.length / pageSize));
           setLoading(false);
         }
       }, 1000);
@@ -44,29 +50,32 @@ const Books = ({ match }) => {
       {
         Header: 'Title',
         accessor: 'title',
-        cellClass: 'list-item-heading w-40',
+        cellClass: 'list-item-heading w-20',
         Cell: (props) => {
           return (
-            <NavLink to={`${props.row.original.id}`}>{props.value}</NavLink>
+            <NavLink to={`books/${props.row.original.id}`}>
+              {props.value}
+            </NavLink>
           );
         },
       },
       {
         Header: 'Author',
-        accessor: 'sales',
-        cellClass: 'text-muted w-20',
+        accessor: 'tags',
+        cellClass: 'text-muted',
         Cell: (props) => <>{props.value}</>,
       },
       {
         Header: 'ISBN',
-        accessor: 'stock',
-        cellClass: 'text-muted w-10',
+        accessor: 'ISBN',
+        cellClass: 'text-muted ',
         Cell: (props) => <>{props.value}</>,
       },
+
       {
-        Header: 'Actions',
-        accessor: 'category',
-        cellClass: 'text-muted w-40',
+        Header: 'Total Sales',
+        accessor: 'pages',
+        cellClass: 'text-muted ',
         Cell: (props) => <>{props.value}</>,
       },
     ],
@@ -90,6 +99,7 @@ const Books = ({ match }) => {
                 pageCount={pageCount}
                 fetchData={fetchData}
                 loading={loading}
+                searchPlaceholder="pages.search-books"
               />
             </CardBody>
           </Card>
