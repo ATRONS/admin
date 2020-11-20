@@ -3,23 +3,44 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import AddNewAuthor from './AddNewAuthor';
 // import { ProtectedRoute, UserRole } from '../../../helpers/authHelper';
 
-const Author = React.lazy(() =>
-  import(/* webpackChunkName: "dashboard-default" */ './author')
+const Authors = React.lazy(() =>
+  import(/* webpackChunkName: "dashboard-default" */ './AuthorsListPage')
 );
-const Company = React.lazy(() =>
-  import(/* webpackChunkName: "dashboard-content" */ './company')
+
+const Companies = React.lazy(() =>
+  import(/* webpackChunkName: "dashboard-content" */ './CompaniesListPage')
 );
+
+const ProviderProfile = React.lazy(() =>
+  import(/* webpackChunkName: "pages-profile" */ './ProviderProfile')
+);
+
 const ResourceProviders = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>
     <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}/authors`} />
       <Route
         path={`${match.url}/authors`}
-        render={(props) => <Author {...props} />}
+        exact
+        render={(props) => <Authors {...props} />}
       />
+
+      <Route
+        path={`${match.url}/authors/:id`}
+        exact
+        render={(props) => <ProviderProfile type="author" {...props} />}
+      />
+
       <Route
         path={`${match.url}/companies`}
-        render={(props) => <Company {...props} />}
+        exact
+        render={(props) => <Companies {...props} />}
+      />
+
+      <Route
+        path={`${match.url}/companies/:id`}
+        exact
+        render={(props) => <ProviderProfile type="company" {...props} />}
       />
 
       <Route
