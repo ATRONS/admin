@@ -9,7 +9,7 @@ import { Card, CardBody } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import MyTable from '../../../containers/materials/common-table';
 import { books_dummy } from '../../../data/book';
-import { loadAll } from '../../../services/api/materials';
+import apiMaterials, { loadAll } from '../../../services/api/materials';
 import { apiBooks } from '../../../services/api';
 
 const Books = ({ match }) => {
@@ -25,22 +25,27 @@ const Books = ({ match }) => {
       const fetchId = ++fetchIdRef.current;
       setLoading(true);
       // loadAll();
-      setTimeout(() => {
-        // Only update the data if this is the latest fetch
-        if (fetchId === fetchIdRef.current) {
-          const startRow = pageSize * pageIndex;
-          const endRow = startRow + pageSize;
-          // apiBooks.getAll({ startRow, pageSize, searchKeyword });
-          let newBooks = books_dummy.filter((book) =>
-            book.title
-              .toLocaleLowerCase()
-              .includes(searchKeyword.toLocaleLowerCase())
-          );
-          setBooks(newBooks.slice(startRow, endRow));
-          setPageCount(Math.ceil(newBooks.length / pageSize));
-          setLoading(false);
-        }
-      }, 1000);
+      // Only update the data if this is the latest fetch
+      if (fetchId === fetchIdRef.current) {
+        const startRow = pageSize * pageIndex;
+        const endRow = startRow + pageSize;
+        // apiBooks.getAll({ startRow, pageSize, searchKeyword });
+        apiMaterials
+          .getAll({
+            start: startRow,
+            size: pageSize,
+            search: searchKeyword,
+            type: 'BOOK',
+          })
+          .then((res) => {
+            if (res.success) {
+              const newBooks = res.data.materials;
+              setBooks(newBooks.slice(startRow, endRow));
+              setPageCount(Math.ceil(res.data.total_materials / pageSize));
+            }
+            setLoading(false);
+          });
+      }
     },
     []
   );
@@ -53,7 +58,7 @@ const Books = ({ match }) => {
         cellClass: 'list-item-heading w-20',
         Cell: (props) => {
           return (
-            <NavLink to={`books/${props.row.original.id}`}>
+            <NavLink to={`books/${props.row.original._id}`}>
               {props.value}
             </NavLink>
           );
@@ -61,7 +66,7 @@ const Books = ({ match }) => {
       },
       {
         Header: 'Author',
-        accessor: 'tags',
+        accessor: 'provider.legal_name',
         cellClass: 'text-muted',
         Cell: (props) => <>{props.value}</>,
       },
