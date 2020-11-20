@@ -10,6 +10,7 @@ import products from '../../../data/products';
 import { NavLink } from 'react-router-dom';
 import MyTable from '../../../containers/materials/common-table';
 import apiMagazines from '../../../services/api/magazines';
+import apiMaterials from '../../../services/api/materials';
 
 const Magazines = ({ match }) => {
   const [] = useState('');
@@ -29,16 +30,21 @@ const Magazines = ({ match }) => {
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
 
-          // apiMagazines.getAll({ startRow, pageSize, searchKeyword });
-
-          let newMagazines = products.filter((product) =>
-            product.title
-              .toLocaleLowerCase()
-              .includes(searchKeyword.toLocaleLowerCase())
-          );
-          setBooks(newMagazines.slice(startRow, endRow));
-          setPageCount(Math.ceil(newMagazines.length / pageSize));
-          setLoading(false);
+          apiMaterials
+            .getAll({
+              start: startRow,
+              size: pageSize,
+              search: searchKeyword,
+              type: 'MAGAZINE',
+            })
+            .then((res) => {
+              if (res.success) {
+                const newMagazines = res.data.materials;
+                setBooks(newMagazines.slice(startRow, endRow));
+                setPageCount(Math.ceil(res.data.total_materials / pageSize));
+              }
+              setLoading(false);
+            });
         }
       }, 1000);
     },
