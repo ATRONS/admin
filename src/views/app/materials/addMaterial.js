@@ -1,6 +1,6 @@
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 
-import React, { createRef, useState } from 'react';
+import React, { createRef, useState, useEffect } from 'react';
 import { Card, CardBody, Row, Spinner } from 'reactstrap';
 import { Wizard, Steps, Step } from 'react-albus';
 import { injectIntl } from 'react-intl';
@@ -12,10 +12,41 @@ import MaterialBasicForm from '../../../containers/add-material/MaterialBasicFor
 import MaterialDetailedForm from '../../../containers/add-material/MaterialDetailedForm';
 import MaterialPricingForm from '../../../containers/add-material/MaterialPricingForm';
 
+const dummyTags = [
+  {
+      "value": "5face2c3e90aba294074feed",
+      "label": "fiction",
+
+  },
+  {
+      "value": "5face2c3e90aba294074feee",
+      "label": "history",
+
+  },
+  {
+      "value": "5face2c3e90aba294074feef",
+      "label": "thriller",
+
+  },
+  {
+      "value": "5face2c3e90aba294074fef0",
+      "label": "science_fiction",
+
+  },
+  {
+      "value": "5face2c3e90aba294074fef1",
+      "label": "biography",
+
+  }
+]
+
 const AddMaterialWizard = ({ match, intl }) => {
   const forms = [createRef(null), createRef(null), createRef(null)];
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tagsLoaded, setTagsLoaded] = useState(true)
+  const [tags, setTags] = useState(dummyTags)
+
   const [fields, setFields] = useState([]);
   const [] = useState('');
 
@@ -29,6 +60,10 @@ const AddMaterialWizard = ({ match, intl }) => {
       setLoading(false);
     }, 3000);
   };
+
+  // useEffect(()=>{
+
+  // }, [])
 
   const submitMaterialData = (data) => {
     console.log('Final data', data);
@@ -77,6 +112,12 @@ const AddMaterialWizard = ({ match, intl }) => {
           <Separator className="mb-5" />
         </Colxx>
       </Row>
+      {
+    
+    !tagsLoaded ? (
+      <div className="loading"></div>
+    ): 
+      
       <Row>
         <Colxx xxs="12" className="mb-5">
           <Row>
@@ -107,6 +148,7 @@ const AddMaterialWizard = ({ match, intl }) => {
                       >
                         <MaterialDetailedForm
                           innerRef={forms[1]}
+                          tags={tags}
                           onFormSubmitted={onStepFormSubmitted}
                           initialValues={fields[1] || {}}
                           materialType={fields[0] ? fields[0].type.value : ''}
@@ -163,6 +205,7 @@ const AddMaterialWizard = ({ match, intl }) => {
           </Row>
         </Colxx>
       </Row>
+}
     </>
   );
 };
