@@ -15,8 +15,11 @@ import {
 } from 'reactstrap';
 import { FormikDatePicker } from '../../containers/resource-providers/FormikFields';
 import IntlMessages from '../../helpers/IntlMessages';
+import apiProviders from '../../services/api/provider';
 
-const SignupSchema = Yup.object().shape({
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+const CompanySchema = Yup.object().shape({
   LegalName: Yup.string()
     .min(2, 'Too Short!')
     .max(100, 'Too Long!')
@@ -24,35 +27,55 @@ const SignupSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
     .required('Please enter your email address'),
+  about: Yup.string()
+    .min(10, 'Too Short!')
+    .max(1000, 'Too Long!')
+    .required('Please enter describtion about your company'),
+  hq_address: Yup.string()
+    .min(10, 'Too Short!')
+    .max(100, 'Too Long!')
+    .required('Please enter your address'),
+  phone: Yup.string()
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .required('Office phone number is required'),
   foundOn: Yup.date().nullable().required('Date of establishement required'),
 });
 
-const AddNewCompany = ({ modalOpen, toggleModal, handleSubmit }) => {
-  const onSubmit = (values) => {
+const AddNewCompanyModal = ({ modalOpen, toggleModal, handleSubmit }) => {
+  const onSubmit = (values, actions) => {
     console.log(values);
 
     const {
       LegalName,
-      lastName,
       displayName,
       email,
       foundOn,
-      activeFrom,
+      phone,
+      about,
+      hq_address,
     } = values;
 
     const payload = {
-      LegalName: LegalName,
+      legal_name: LegalName,
       display_name: displayName,
       email: email,
-      is_company: false,
-      author_info: {
-        foundOn: foundOn,
-        active_from: activeFrom,
+      phone,
+      about,
+      is_company: true,
+      company_info: {
+        hq_address: hq_address,
+        founded_date: foundOn.toISOString(),
       },
-      provides: 'BOOK',
+      password: 'Dummy',
     };
 
-    handleSubmit(payload);
+    apiProviders.post(payload).then((res) => {
+      console.log('ache', res);
+      if (res.success) {
+        handleSubmit(res.data);
+      }
+      actions.setSubmitting(false);
+    });
 
     console.log('Sending', payload);
   };
@@ -70,12 +93,16 @@ const AddNewCompany = ({ modalOpen, toggleModal, handleSubmit }) => {
       <ModalBody>
         <Formik
           initialValues={{
-            LegalName: '',
-            displayName: '',
-            email: '',
-            foundOn: null,
+            LegalName: 'Ekelle Printing media and Service',
+            displayName: 'Some what ekelele',
+            email: 'henokdf@fjalskdf.com',
+            foundOn: new Date(),
+            hq_address: 'Mafi city mall, 6th floor, Addis Ababa, Ethiopia',
+            phone: '0115541203',
+            about:
+              'jf alskdjf lasjdfl asjdflk asdjfl kasdjflk adsjglk adsjflkads jglkasdj glkasdjg lkasdjglkads jg',
           }}
-          validationSchema={SignupSchema}
+          validationSchema={CompanySchema}
           onSubmit={onSubmit}
         >
           {({ setFieldValue, setFieldTouched, values, errors, touched }) => (
@@ -102,6 +129,24 @@ const AddNewCompany = ({ modalOpen, toggleModal, handleSubmit }) => {
                 ) : null}
               </FormGroup>
 
+              <FormGroup>
+                <Label>Office Phone</Label>
+                <Field className="form-control" name="phone" type="tel" />
+                {errors.phone && touched.phone ? (
+                  <div className="invalid-feedback d-block">{errors.phone}</div>
+                ) : null}
+              </FormGroup>
+
+              <FormGroup className="error-l-75">
+                <Label>Address</Label>
+                <Field className="form-control" name="hq_address" />
+                {errors.hq_address && touched.hq_address ? (
+                  <div className="invalid-feedback d-block">
+                    {errors.hq_address}
+                  </div>
+                ) : null}
+              </FormGroup>
+
               <FormGroup className="error-l-100">
                 <Label className="d-block">Established</Label>
                 <FormikDatePicker
@@ -114,6 +159,18 @@ const AddNewCompany = ({ modalOpen, toggleModal, handleSubmit }) => {
                   <div className="invalid-feedback d-block">
                     {errors.foundOn}
                   </div>
+                ) : null}
+              </FormGroup>
+
+              <FormGroup>
+                <Label>About the author</Label>
+                <Field
+                  className="form-control"
+                  name="about"
+                  component="textarea"
+                />
+                {errors.about && touched.about ? (
+                  <div className="invalid-feedback d-block">{errors.about}</div>
                 ) : null}
               </FormGroup>
 
@@ -133,4 +190,4 @@ const AddNewCompany = ({ modalOpen, toggleModal, handleSubmit }) => {
   );
 };
 
-export default AddNewCompany;
+export default AddNewCompanyModal;
