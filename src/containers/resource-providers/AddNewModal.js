@@ -13,7 +13,7 @@ import {
   Modal,
   ModalFooter,
 } from 'reactstrap';
-import { FormikDatePicker } from '../../containers/resource-providers/FormikFields';
+import { FormikDatePicker } from '../../containers/common/FormikFields';
 import IntlMessages from '../../helpers/IntlMessages';
 import apiProviders from '../../services/api/provider';
 
