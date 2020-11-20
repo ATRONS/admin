@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import BookDetail from './BookDetail';
+import MaterialDetails from './MaterialDetails';
 // import { Books } from './Books';
 
 const Books = React.lazy(() => import('./Books'));
@@ -19,7 +19,7 @@ const Pages = ({ match }) => (
       <Route
         path={`${match.url}/books/:id`}
         exact
-        render={(props) => <BookDetail {...props} />}
+        render={(props) => <MaterialDetails type="book" {...props} />}
       />
 
       <Route
