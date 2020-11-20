@@ -29,6 +29,8 @@ import { Authors_Dummy } from '../../../data/authors';
 import { books_dummy } from '../../../data/book';
 import { companies_Dummy } from '../../../data/companies';
 import apiProviders from '../../../services/api/provider';
+import apiMaterials from '../../../services/api/materials';
+import urls from '../../../services/api/urls';
 
 const products = productData.slice(0, 15);
 
@@ -65,22 +67,22 @@ const ProviderProfile = ({ match, type }) => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   // fetchData();
-  //   setLoading(false);
-  //   let data = type == 'author' ? Authors_Dummy[0] : companies_Dummy[0];
-  //   setProfileDetails(data);
-  // }, [selectedPageSize, currentPage]);
-
   useEffect(() => {
     if (activeTab == 'materials' && !resourcesLoaded && !resourcesLoading) {
       setresourcesLoading(true);
-      setTimeout(() => {
-        setresources(books_dummy);
-        setTotalPage(2);
-        setresourcesLoading(false);
-        setresourcesLoaded(true);
-      }, 2000);
+      apiMaterials.getAll({ provider: profileDetails._id }).then((res) => {
+        if (res.success) {
+          const newMaterials = res.data.materials.map((mat) => {
+            mat.cover_img_url = urls.MAIN_URL + mat.cover_img_url;
+            return mat;
+          });
+
+          setresources(newMaterials);
+          setTotalPage(Math.ceil(newMaterials.total_materials / 5));
+          setresourcesLoading(false);
+          setresourcesLoaded(true);
+        }
+      });
     }
   }, [activeTab]);
 
@@ -91,7 +93,7 @@ const ProviderProfile = ({ match, type }) => {
       ) : (
         <Row>
           <Colxx xxs="12">
-            <h1>Sarah Kortney</h1>
+            <h1>{profileDetails.legal_name}</h1>
             <div className="text-zero top-right-button-container">
               <UncontrolledDropdown>
                 <DropdownToggle
@@ -170,7 +172,19 @@ const ProviderProfile = ({ match, type }) => {
 
                 <TabContent activeTab={activeTab}>
                   <TabPane tabId="reports">
-                    <ProviderReporting />
+                    <ProviderReporting
+                      data={{
+                        summary: {
+                          total_sells_amount: profileDetails.total_sells_amount,
+                          total_sells_count: profileDetails.total_sells_count,
+                          total_materials_count:
+                            profileDetails.total_materials_count,
+                          available_balance: profileDetails.available_balance,
+                        },
+
+                        sells_report: profileDetails.sells_report,
+                      }}
+                    />
                   </TabPane>
                   <TabPane tabId="materials">
                     <Row>
