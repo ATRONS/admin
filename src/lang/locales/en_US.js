@@ -53,6 +53,7 @@ module.exports = {
   'menu.authors': 'Authors',
   'menu.companies': 'Companies',
   'menu.add-new-author': 'Add New Author',
+  'menu.add-new-company': 'Add New Company',
 
   'menu.materials': 'Materials',
   'menu.books': 'Books',
@@ -168,6 +169,7 @@ module.exports = {
   'wizard.content-2': 'Step content for second step.',
   'wizard.content-3': 'Last step content!',
   'wizard.content-thanks': 'Thank You!',
+  'wizard.content-success': 'Success!',
   'wizard.next': 'Next',
   'wizard.prev': 'Back',
   'wizard.registered': 'Your registration completed successfully!',
@@ -232,6 +234,7 @@ module.exports = {
   'forms.it-free': 'It is free',
   'forms.uploaded-on': 'Uploaded On',
   'forms.language': 'Language',
+  'forms.author-name': 'Author',
 
   /* Reporting */
   /* 05, Dashboard Page */
