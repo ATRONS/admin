@@ -13,7 +13,7 @@ import {
   Modal,
   ModalFooter,
 } from 'reactstrap';
-import { FormikDatePicker } from '../../containers/resource-providers/FormikFields';
+import { FormikDatePicker } from '../../containers/common/FormikFields';
 import IntlMessages from '../../helpers/IntlMessages';
 import apiProviders from '../../services/api/provider';
 
@@ -88,7 +88,7 @@ const AddNewCompanyModal = ({ modalOpen, toggleModal, handleSubmit }) => {
       backdrop="static"
     >
       <ModalHeader toggle={toggleModal}>
-        <IntlMessages id="author.add-new-modal-title" />
+        <IntlMessages id="menu.add-new-company" />
       </ModalHeader>
       <ModalBody>
         <Formik
