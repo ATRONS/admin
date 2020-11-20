@@ -5,15 +5,8 @@ const data = [
   {
     id: 'gogo',
     icon: 'iconsminds-air-balloon-1',
-    label: 'menu.gogo',
+    label: 'menu.home',
     to: `${adminRoot}/gogo`,
-    subs: [
-      {
-        icon: 'simple-icon-paper-plane',
-        label: 'menu.start',
-        to: `${adminRoot}/gogo/start`,
-      },
-    ],
   },
   {
     id: 'resource-providers',
@@ -63,20 +56,6 @@ const data = [
         to: `${adminRoot}/materials/add-material`,
       },
     ],
-  },
-
-  {
-    id: 'blankpage',
-    icon: 'iconsminds-bucket',
-    label: 'menu.blank-page',
-    to: `${adminRoot}/blank-page`,
-  },
-  {
-    id: 'docs',
-    icon: 'iconsminds-library',
-    label: 'menu.docs',
-    to: 'https://gogo-react-docs.coloredstrategies.com/',
-    newWindow: true,
   },
 ];
 export default data;
