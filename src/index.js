@@ -12,9 +12,13 @@ import {
   isDarkSwitchActive,
 } from './constants/defaultValues';
 import { getCurrentColor, setCurrentColor } from './helpers/Utils';
+import { configureAxios } from './services/api/core';
 
-const color = (isMultiColorActive || isDarkSwitchActive) ? getCurrentColor() : defaultColor;
+const color =
+  isMultiColorActive || isDarkSwitchActive ? getCurrentColor() : defaultColor;
 setCurrentColor(color);
+
+configureAxios();
 
 const render = () => {
   import(`./assets/css/sass/themes/gogo.${color}.scss`).then(() => {
