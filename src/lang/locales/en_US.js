@@ -139,13 +139,17 @@ module.exports = {
   'pages.phoneNumber': 'Phone number',
   'pages.birthDate': 'Birth date',
   'pages.foundOn': 'Established on',
+  'pages.activeFrom': 'Active From',
 
   'pages.books': 'Books',
   'pages.magazines': 'Magazines',
   'pages.newspaper': 'Newspapers',
+  'pages.mag_or_newspapaers': 'Newspapers or Magazines',
   'pages.search-books': 'Search books with title, ISBN and author',
   'pages.search-magazines': 'Search magazines with title, and company name',
   'pages.comments': 'Comments',
+
+  'pages.reports': 'Reports',
 
   // page 06 - modals
   'modal.comfirmation': 'Comfirmation',
@@ -228,4 +232,15 @@ module.exports = {
   'forms.it-free': 'It is free',
   'forms.uploaded-on': 'Uploaded On',
   'forms.language': 'Language',
+
+  /* Reporting */
+  /* 05, Dashboard Page */
+  'dashbaord.total_amount': 'Total Sales',
+  'dashbaord.available_amount': 'Available Balance',
+  'dashbaord.total_books': 'Total Books',
+  'dashbaord.total_newspapers': 'Total Newspapers',
+  'dashbaord.top_selling_books': 'Top Selling Books',
+  'dashbaord.top_selling_magazines': 'Top Selling Magazines',
+  'dashbaord.top_selling_newspapers': 'Top Selling Newspapers',
+  'dashbaord.last_7_sells': 'Last Seven Day Sells',
 };
