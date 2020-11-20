@@ -76,7 +76,7 @@ const BasicDetailsPane = ({ details, type }) => {
           <IntlMessages id="pages.rating" />
         </p>
         <div className="mb-3">
-          <Rating total={5} rating={5} interactive={false} />
+          <Rating total={5} rating={details.rating.value} interactive={false} />
         </div>
 
         <p className="text-muted text-small mb-2">
@@ -104,27 +104,11 @@ const BasicDetailsPane = ({ details, type }) => {
         </p>
         <div className="mb-3">
           <p className="d-sm-inline-block mb-1">
-            <Badge color="outline-secondary mb-1 mr-1" pill>
-              Flour
-            </Badge>
-            <Badge color="outline-secondary mb-1 mr-1" pill>
-              Chocolate
-            </Badge>
-            <Badge color="outline-secondary mb-1 mr-1" pill>
-              Caster Sugar
-            </Badge>
-            <Badge color="outline-secondary mb-1 mr-1" pill>
-              Baking Powder
-            </Badge>
-            <Badge color="outline-secondary mb-1 mr-1" pill>
-              Milk
-            </Badge>
-            <Badge color="outline-secondary mb-1 mr-1" pill>
-              Eggs
-            </Badge>
-            <Badge color="outline-secondary mb-1 mr-1" pill>
-              Vegetable Oil
-            </Badge>
+            {details.tags.map((tag) => (
+              <Badge color="outline-secondary mb-1 mr-1" pill>
+                {tag.name}
+              </Badge>
+            ))}
           </p>
         </div>
 
