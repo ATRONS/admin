@@ -93,14 +93,13 @@ const AddNewCompanyModal = ({ modalOpen, toggleModal, handleSubmit }) => {
       <ModalBody>
         <Formik
           initialValues={{
-            LegalName: 'Ekelle Printing media and Service',
-            displayName: 'Some what ekelele',
-            email: 'henokdf@fjalskdf.com',
-            foundOn: new Date(),
-            hq_address: 'Mafi city mall, 6th floor, Addis Ababa, Ethiopia',
-            phone: '0115541203',
-            about:
-              'jf alskdjf lasjdfl asjdflk asdjfl kasdjflk adsjglk adsjflkads jglkasdj glkasdjg lkasdjglkads jg',
+            LegalName: '',
+            displayName: '',
+            email: '',
+            foundOn: null,
+            hq_address: '',
+            phone: '',
+            about: '',
           }}
           validationSchema={CompanySchema}
           onSubmit={onSubmit}

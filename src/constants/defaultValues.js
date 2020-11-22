@@ -1,4 +1,4 @@
-import { UserRole } from "../helpers/authHelper";
+import { UserRole } from '../helpers/authHelper';
 
 /*
 Menu Types:
@@ -24,7 +24,8 @@ export const firebaseConfig = {
   messagingSenderId: '216495999563',
 };
 
-export const adminRoot = '/app';
+export const adminRoot = '/admin';
+export const providerRoot = '/provider';
 export const buyUrl = 'https://1.envato.market/k4z0';
 export const searchPath = `${adminRoot}/#`;
 export const servicePath = 'https://api.coloredstrategies.com';
@@ -34,9 +35,8 @@ export const currentUser = {
   title: 'Sarah Kortney',
   img: '/assets/img/profiles/l-1.jpg',
   date: 'Last seen today 15:24',
-  role: UserRole.Admin
-}
-
+  role: UserRole.Admin,
+};
 
 export const themeColorStorageKey = '__theme_selected_color';
 export const isMultiColorActive = true;

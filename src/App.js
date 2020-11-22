@@ -11,16 +11,25 @@ import './helpers/Firebase';
 import AppLocale from './lang';
 import ColorSwitcher from './components/common/ColorSwitcher';
 import { NotificationContainer } from './components/common/react-notifications';
-import { isMultiColorActive, adminRoot } from './constants/defaultValues';
+import {
+  isMultiColorActive,
+  adminRoot,
+  providerRoot,
+} from './constants/defaultValues';
 import { getDirection } from './helpers/Utils';
 import { ProtectedRoute, UserRole } from './helpers/authHelper';
 
 const ViewHome = React.lazy(() =>
   import(/* webpackChunkName: "views" */ './views/home')
 );
-const ViewApp = React.lazy(() =>
-  import(/* webpackChunkName: "views-app" */ './views/app')
+const ViewAdmin = React.lazy(() =>
+  import(/* webpackChunkName: "views-app" */ './views/admin')
 );
+
+const ViewProvider = React.lazy(() =>
+  import(/* webpackChunkName: "views-app" */ './views/provider')
+);
+
 const ViewUser = React.lazy(() =>
   import(/* webpackChunkName: "views-user" */ './views/user')
 );
@@ -30,7 +39,6 @@ const ViewError = React.lazy(() =>
 const ViewUnauthorized = React.lazy(() =>
   import(/* webpackChunkName: "views-error" */ './views/unauthorized')
 );
-
 
 class App extends React.Component {
   constructor(props) {
@@ -63,7 +71,12 @@ class App extends React.Component {
                 <Switch>
                   <ProtectedRoute
                     path={adminRoot}
-                    component={ViewApp}
+                    component={ViewAdmin}
+                    roles={[UserRole.Admin, UserRole.Editor]}
+                  />
+                  <ProtectedRoute
+                    path={providerRoot}
+                    component={ViewProvider}
                     roles={[UserRole.Admin, UserRole.Editor]}
                   />
                   <Route

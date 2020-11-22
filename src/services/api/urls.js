@@ -1,5 +1,6 @@
-const BASE_URL = 'http://10.6.196.165:5000/api/v1/admin';
-const MAIN_URL = 'http://10.6.196.165:5000/api/v1';
+const MAIN_URL = 'http://192.168.0.27:5000/api/v1';
+const BASE_URL = MAIN_URL + '/admin';
+
 const books = 'books/';
 const uploadMaterial = BASE_URL + '/upload/material';
 

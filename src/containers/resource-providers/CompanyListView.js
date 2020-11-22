@@ -20,7 +20,7 @@ const CompanyListView = ({ company, isSelect, collect, onCheckItem }) => {
           <NavLink to={companyProfileUrl} className="d-flex">
             <img
               alt={company.legal_name}
-              src={company.img}
+              src={'/assets/img/products/marble-cake-thumb.jpg'}
               className="list-thumbnail responsive border-0 card-img-left"
             />
           </NavLink>
