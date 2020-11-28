@@ -19,15 +19,20 @@ import {
   resetPasswordError,
 } from './actions';
 
-import { adminRoot, currentUser } from "../../constants/defaultValues"
+import {
+  adminRoot,
+  currentUser,
+  providerRoot,
+} from '../../constants/defaultValues';
 import { setCurrentUser } from '../../helpers/Utils';
+import { apiAuth } from '../../services/api/auth';
 
 export function* watchLoginUser() {
   yield takeEvery(LOGIN_USER, loginWithEmailPassword);
 }
 
-const loginWithEmailPasswordAsync = async (email, password) =>
-  await auth
+const loginWithEmailPasswordAsync = (email, password) =>
+  auth
     .signInWithEmailAndPassword(email, password)
     .then((user) => user)
     .catch((error) => error);
@@ -37,11 +42,12 @@ function* loginWithEmailPassword({ payload }) {
   const { history } = payload;
   try {
     const loginUser = yield call(loginWithEmailPasswordAsync, email, password);
+    // const loginUser = yield call(apiAuth.login, email, password);
     if (!loginUser.message) {
       const item = { uid: loginUser.user.uid, ...currentUser };
       setCurrentUser(item);
       yield put(loginUserSuccess(item));
-      history.push(adminRoot);
+      history.push(providerRoot);
     } else {
       yield put(loginUserError(loginUser.message));
     }
