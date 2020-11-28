@@ -1,12 +1,12 @@
-import { adminRoot } from './defaultValues';
+import { adminRoot, providerRoot } from './defaultValues';
 // import { UserRole } from "../helpers/authHelper"
 
-const data = [
+export const adminMenuItems = [
   {
-    id: 'gogo',
+    id: 'home',
     icon: 'iconsminds-air-balloon-1',
     label: 'menu.home',
-    to: `${adminRoot}/gogo`,
+    to: `${adminRoot}/home`,
   },
   {
     id: 'resource-providers',
@@ -58,4 +58,60 @@ const data = [
     ],
   },
 ];
-export default data;
+
+export const providerMenuItems = [
+  {
+    id: 'home',
+    icon: 'iconsminds-air-balloon-1',
+    label: 'menu.home',
+    to: `${providerRoot}/home`,
+  },
+  {
+    id: 'menu.requests',
+    icon: 'iconsminds-three-arrow-fork',
+    label: 'menu.requests',
+    to: `${providerRoot}/requests`,
+    // roles: [UserRole.Admin, UserRole.Editor],
+  },
+
+  {
+    id: 'menu.materials',
+    icon: 'iconsminds-three-arrow-fork',
+    label: 'menu.materials',
+    to: `${providerRoot}/materials`,
+    // roles: [UserRole.Admin, UserRole.Editor],
+  },
+  {
+    id: 'menu.Reports',
+    icon: 'iconsminds-three-arrow-fork',
+    label: 'menu.Reports',
+    to: `${providerRoot}/reports`,
+    // roles: [UserRole.Admin, UserRole.Editor],
+    subs: [
+      {
+        icon: 'simple-icon-briefcase',
+        label: 'menu.earning_by_material',
+        to: `${providerRoot}/reports/earning_by_material`,
+        // roles: [UserRole.Admin],
+      },
+      {
+        icon: 'simple-icon-pie-chart',
+        label: 'menu.my_reports',
+        to: `${providerRoot}/reports/my-reports`,
+        // roles: [UserRole.Admin],
+      },
+      {
+        icon: 'simple-icon-basket-loaded',
+        label: 'menu.overView',
+        to: `${providerRoot}/reports/overview`,
+        // roles: [UserRole.Editor],
+      },
+      {
+        icon: 'simple-icon-doc',
+        label: 'menu.transaction_reports',
+        to: `${providerRoot}/reports/transactions`,
+        // roles: [UserRole.Editor],
+      },
+    ],
+  },
+];
