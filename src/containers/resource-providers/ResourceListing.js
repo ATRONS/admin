@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row } from 'reactstrap';
-import Pagination from './Pagination';
-import ResourceImageListView from './ResourceImageListView';
+import Pagination from '../common/Pagination';
+import ResourceImageListView from '../common/ResourceImageListView';
 
 const ResourceListing = ({
   providers,
