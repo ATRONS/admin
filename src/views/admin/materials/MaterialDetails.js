@@ -31,7 +31,7 @@ import { books_dummy } from '../../../data/book';
 
 import { SmallLineChart } from '../../../components/charts';
 import NewComments from '../../../containers/dashboard/NewComments';
-import BasicDetailsPane from '../../../containers/resource-providers/BasicDetailsPane';
+import BasicDetailsPane from '../../../containers/common/BasicDetailsPane';
 import apiMaterials from '../../../services/api/materials';
 import urls from '../../../services/api/urls';
 
