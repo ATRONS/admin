@@ -1,18 +1,19 @@
 const data = [
   {
-    title: 'dashbaord.available_amount',
+    title: 'reporting.total_earning',
     icon: 'iconsminds-basket-coins',
     value: 'ETB 74',
   },
   {
-    title: 'dashbaord.total_amount',
+    title: 'reporting.total_sells',
     icon: 'iconsminds-arrow-refresh',
-    value: 'ETB 74',
+    value: '174',
   },
   {
-    title: 'dashbaord.total_books',
+    title: 'reporting.total_downloads',
     icon: 'iconsminds-mail-read',
-    value: 'ETB 74',
+    value: '1274',
   },
 ];
+
 export default data;
