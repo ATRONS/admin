@@ -24,13 +24,13 @@ import productData from '../../../data/products';
 import classnames from 'classnames';
 import ResourceListing from '../../../containers/resource-providers/ResourceListing';
 import ProviderReporting from '../../../containers/resource-providers/ProviderReporting';
-import BasicDetailsPane from '../../../containers/resource-providers/BasicDetailsPane';
 import { Authors_Dummy } from '../../../data/authors';
 import { books_dummy } from '../../../data/book';
 import { companies_Dummy } from '../../../data/companies';
 import apiProviders from '../../../services/api/provider';
 import apiMaterials from '../../../services/api/materials';
 import urls from '../../../services/api/urls';
+import BasicDetailsPane from '../../../containers/common/BasicDetailsPane';
 
 const products = productData.slice(0, 15);
 
