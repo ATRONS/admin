@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import AppLayout from '../../layout/AppLayout';
+import AppLayout from '../../layout/AdminLayout';
 import { AddNewAuthor } from './resource-providers/AddNewAuthor';
 // import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
 
