@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 
-import apiMaterials from '../../../services/api/materials';
+import apiMaterials from '../../../services/api/provider-related/materials';
 import MaterialListingHeading from '../../../containers/materials/MaterialListingHeading';
 import MaterialListing from '../../../containers/materials/MaterialListing';
 import { Row } from 'reactstrap';
@@ -14,7 +14,6 @@ const orderOptions = [
 ];
 const pageSizes = [4, 8, 12, 20];
 const MaterialListingPage = ({ match }) => {
-  const [] = useState('');
   const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = React.useState(false);
   const fetchIdRef = React.useRef(0);
@@ -37,7 +36,7 @@ const MaterialListingPage = ({ match }) => {
     fetchData();
   }, []);
 
-  const fetchDatas = React.useCallback(() => {
+  const fetchData = React.useCallback(() => {
     const fetchId = ++fetchIdRef.current;
     setLoading(true);
     if (fetchId === fetchIdRef.current) {
@@ -45,7 +44,6 @@ const MaterialListingPage = ({ match }) => {
       const endRow = startRow + selectedPageSize;
       apiMaterials
         .getAll({
-          provider: '5fb7ec05faf68e1b00fe7f3c',
           start: startRow,
           size: selectedPageSize,
           search,
@@ -65,18 +63,18 @@ const MaterialListingPage = ({ match }) => {
     }
   }, []);
 
-  const fetchData = React.useCallback(() => {
-    const fetchId = ++fetchIdRef.current;
-    setLoading(true);
-    if (fetchId === fetchIdRef.current) {
-      const startRow = selectedPageSize * (currentPage - 1);
-      const endRow = startRow + selectedPageSize;
+  // const fetchData = React.useCallback(() => {
+  //   const fetchId = ++fetchIdRef.current;
+  //   setLoading(true);
+  //   if (fetchId === fetchIdRef.current) {
+  //     const startRow = selectedPageSize * (currentPage - 1);
+  //     const endRow = startRow + selectedPageSize;
 
-      setMaterials(books_dummy);
-      setTotalPage(Math.ceil(books_dummy.length / selectedPageSize));
-    }
-    setLoading(false);
-  }, []);
+  //     setMaterials(books_dummy);
+  //     setTotalPage(Math.ceil(books_dummy.length / selectedPageSize));
+  //   }
+  //   setLoading(false);
+  // }, []);
 
   const startIndex = (currentPage - 1) * selectedPageSize;
   const endIndex = currentPage * selectedPageSize;
