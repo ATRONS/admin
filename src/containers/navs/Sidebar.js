@@ -13,10 +13,7 @@ import {
   addContainerClassname,
   changeDefaultClassnames,
   changeSelectedMenuHasSubItems,
-
 } from '../../redux/actions';
-
-import menuItems from '../../constants/menu';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -216,7 +213,7 @@ class Sidebar extends Component {
       } else if (this.state.selectedParentMenu === '') {
         this.setState(
           {
-            selectedParentMenu: menuItems[0].id,
+            selectedParentMenu: this.props.menuItems[0].id,
           },
           callback
         );
@@ -232,7 +229,9 @@ class Sidebar extends Component {
 
   getIsHasSubItem = () => {
     const { selectedParentMenu } = this.state;
-    const menuItem = menuItems.find((x) => x.id === selectedParentMenu);
+    const menuItem = this.props.menuItems.find(
+      (x) => x.id === selectedParentMenu
+    );
     if (menuItem)
       return !!(menuItem && menuItem.subs && menuItem.subs.length > 0);
     return false;
@@ -325,16 +324,15 @@ class Sidebar extends Component {
   };
 
   filteredList = (menuItems) => {
-    const { currentUser: { role } } = this.props;
-    return menuItems.filter(x => (x.roles && x.roles.includes(role)) || !x.roles)
-  }
-
-
-
+    const {
+      currentUser: { role },
+    } = this.props;
+    return menuItems.filter(
+      (x) => (x.roles && x.roles.includes(role)) || !x.roles
+    );
+  };
 
   render() {
-
-
     const {
       selectedParentMenu,
       viewingParentMenu,
@@ -348,8 +346,8 @@ class Sidebar extends Component {
               options={{ suppressScrollX: true, wheelPropagation: false }}
             >
               <Nav vertical className="list-unstyled">
-                {menuItems &&
-                  this.filteredList(menuItems).map((item) => {
+                {this.props.menuItems &&
+                  this.filteredList(this.props.menuItems).map((item) => {
                     return (
                       <NavItem
                         key={item.id}
@@ -370,15 +368,15 @@ class Sidebar extends Component {
                             <IntlMessages id={item.label} />
                           </a>
                         ) : (
-                            <NavLink
-                              to={item.to}
-                              onClick={(e) => this.openSubMenu(e, item)}
-                              data-flag={item.id}
-                            >
-                              <i className={item.icon} />{' '}
-                              <IntlMessages id={item.label} />
-                            </NavLink>
-                          )}
+                          <NavLink
+                            to={item.to}
+                            onClick={(e) => this.openSubMenu(e, item)}
+                            data-flag={item.id}
+                          >
+                            <i className={item.icon} />{' '}
+                            <IntlMessages id={item.label} />
+                          </NavLink>
+                        )}
                       </NavItem>
                     );
                   })}
@@ -392,8 +390,8 @@ class Sidebar extends Component {
             <PerfectScrollbar
               options={{ suppressScrollX: true, wheelPropagation: false }}
             >
-              {menuItems &&
-                this.filteredList(menuItems).map((item) => {
+              {this.props.menuItems &&
+                this.filteredList(this.props.menuItems).map((item) => {
                   return (
                     <Nav
                       key={item.id}
@@ -414,7 +412,7 @@ class Sidebar extends Component {
                                 sub.subs && sub.subs.length > 0
                                   ? 'has-sub-item'
                                   : ''
-                                }`}
+                              }`}
                             >
                               {sub.newWindow ? (
                                 <a
@@ -434,7 +432,7 @@ class Sidebar extends Component {
                                       ) === -1
                                         ? ''
                                         : 'collapsed'
-                                      }`}
+                                    }`}
                                     to={sub.to}
                                     id={`${item.id}_${index}`}
                                     onClick={(e) =>
@@ -456,42 +454,48 @@ class Sidebar extends Component {
                                     }
                                   >
                                     <Nav className="third-level-menu">
-                                      {this.filteredList(sub.subs).map((thirdSub, thirdIndex) => {
-                                        return (
-                                          <NavItem
-                                            key={`${item.id}_${index}_${thirdIndex}`}
-                                          >
-                                            {thirdSub.newWindow ? (
-                                              <a
-                                                href={thirdSub.to}
-                                                rel="noopener noreferrer"
-                                                target="_blank"
-                                              >
-                                                <i className={thirdSub.icon} />{' '}
-                                                <IntlMessages
-                                                  id={thirdSub.label}
-                                                />
-                                              </a>
-                                            ) : (
+                                      {this.filteredList(sub.subs).map(
+                                        (thirdSub, thirdIndex) => {
+                                          return (
+                                            <NavItem
+                                              key={`${item.id}_${index}_${thirdIndex}`}
+                                            >
+                                              {thirdSub.newWindow ? (
+                                                <a
+                                                  href={thirdSub.to}
+                                                  rel="noopener noreferrer"
+                                                  target="_blank"
+                                                >
+                                                  <i
+                                                    className={thirdSub.icon}
+                                                  />{' '}
+                                                  <IntlMessages
+                                                    id={thirdSub.label}
+                                                  />
+                                                </a>
+                                              ) : (
                                                 <NavLink to={thirdSub.to}>
-                                                  <i className={thirdSub.icon} />{' '}
+                                                  <i
+                                                    className={thirdSub.icon}
+                                                  />{' '}
                                                   <IntlMessages
                                                     id={thirdSub.label}
                                                   />
                                                 </NavLink>
                                               )}
-                                          </NavItem>
-                                        );
-                                      })}
+                                            </NavItem>
+                                          );
+                                        }
+                                      )}
                                     </Nav>
                                   </Collapse>
                                 </>
                               ) : (
-                                    <NavLink to={sub.to}>
-                                      <i className={sub.icon} />{' '}
-                                      <IntlMessages id={sub.label} />
-                                    </NavLink>
-                                  )}
+                                <NavLink to={sub.to}>
+                                  <i className={sub.icon} />{' '}
+                                  <IntlMessages id={sub.label} />
+                                </NavLink>
+                              )}
                             </NavItem>
                           );
                         })}
@@ -522,7 +526,7 @@ const mapStateToProps = ({ menu, authUser }) => {
     menuHiddenBreakpoint,
     menuClickCount,
     selectedMenuHasSubItems,
-    currentUser
+    currentUser,
   };
 };
 export default withRouter(
