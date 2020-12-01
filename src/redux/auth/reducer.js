@@ -16,9 +16,8 @@ import {
 import { getCurrentUser } from '../../helpers/Utils';
 import { isAuthGuardActive, currentUser } from '../../constants/defaultValues';
 
-
 const INIT_STATE = {
-  currentUser: isAuthGuardActive ? currentUser : getCurrentUser(),
+  currentUser: getCurrentUser(),
   forgotUserMail: '',
   newPassword: '',
   resetPasswordCode: '',
@@ -31,7 +30,12 @@ export default (state = INIT_STATE, action) => {
     case LOGIN_USER:
       return { ...state, loading: true, error: '' };
     case LOGIN_USER_SUCCESS:
-      return { ...state, loading: false, currentUser: action.payload, error: '' };
+      return {
+        ...state,
+        loading: false,
+        currentUser: action.payload,
+        error: '',
+      };
     case LOGIN_USER_ERROR:
       return {
         ...state,
@@ -76,7 +80,12 @@ export default (state = INIT_STATE, action) => {
     case REGISTER_USER:
       return { ...state, loading: true, error: '' };
     case REGISTER_USER_SUCCESS:
-      return { ...state, loading: false, currentUser: action.payload, error: '' };
+      return {
+        ...state,
+        loading: false,
+        currentUser: action.payload,
+        error: '',
+      };
     case REGISTER_USER_ERROR:
       return {
         ...state,
