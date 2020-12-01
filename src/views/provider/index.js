@@ -25,11 +25,11 @@ const App = ({ match }) => {
       <div className="dashboard-wrapper">
         <Suspense fallback={<div className="loading" />}>
           <Switch>
-            {/* <Redirect
+            <Redirect
               exact
               from={`${match.url}/`}
               to={`${match.url}/materials`}
-            /> */}
+            />
             <Route
               path={`${match.url}/materials`}
               render={(props) => <Materials {...props} />}
