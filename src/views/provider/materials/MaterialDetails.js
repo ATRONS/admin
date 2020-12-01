@@ -25,7 +25,7 @@ import { comments } from '../../../data/comments';
 import { SmallLineChart } from '../../../components/charts';
 import NewComments from '../../../containers/dashboard/NewComments';
 import BasicDetailsPane from '../../../containers/common/BasicDetailsPane';
-import apiMaterials from '../../../services/api/materials';
+import apiMaterials from '../../../services/api/provider-related/materials';
 import urls from '../../../services/api/urls';
 import { books_dummy } from '../../../data/book';
 import IconCardsCarousel from '../../../containers/common/IconCardsCarousel';
@@ -39,17 +39,43 @@ const MaterialDetails = ({ match, type = 'book' }) => {
 
   useEffect(() => {
     const id = match.params.id;
-    // apiMaterials.getSingle(id).then((res) => {
-    //   if (res.success) {
-    //     const data = res.data.material;
-    //     data.cover_img_url = urls.MAIN_URL + data.cover_img_url;
-    //     setDetails(data);
-    //     setLoading(false);
-    //   }
-    // });
-    setDetails(books_dummy[0]);
-    setLoading(false);
+    apiMaterials.getSingle(id).then((res) => {
+      console.log('what', res);
+      if (res.success) {
+        const data = res.data;
+        console.log('fine', data);
+        data.cover_img_url = urls.MAIN_URL + data.cover_img_url;
+        setDetails(data);
+      }
+      setLoading(false);
+    });
   }, []);
+
+  let summaries = null;
+  if (details) {
+    const reports = details.reports || {
+      totalEarning: 74, // total earnings will represent sells plus renting
+      totalSells: 89, // number of sold copies
+      totalDownloads: 125, // number of downlaods
+    };
+    summaries = [
+      {
+        title: 'reporting.total_earning',
+        icon: 'iconsminds-basket-coins',
+        value: 'ETB ' + reports.totalEarning,
+      },
+      {
+        title: 'reporting.total_sells',
+        icon: 'iconsminds-arrow-refresh',
+        value: reports.totalSells,
+      },
+      {
+        title: 'reporting.total_downloads',
+        icon: 'iconsminds-mail-read',
+        value: reports.totalDownloads,
+      },
+    ];
+  }
 
   return (
     <>
@@ -105,7 +131,7 @@ const MaterialDetails = ({ match, type = 'book' }) => {
               </Colxx>
 
               <Colxx xxs="12" lg="8">
-                <IconCardsCarousel data={data} />
+                <IconCardsCarousel data={summaries} />
 
                 <MaterialSalesAreaChart className="mb-4" />
 
