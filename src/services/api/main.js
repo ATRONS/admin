@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { handleError, handleResponse } from './response';
-// const URLs.BASE_URL = 'http://127.0.0.1:3333/api/v1';
+// const URLs.MAIN_URL = 'http://127.0.0.1:3333/api/v1';
 import URLs from './urls';
 
 /** @param {string} resource */
 const getAll = (resource, params) => {
   return axios
-    .get(`${URLs.BASE_URL}/${resource}`, { params })
+    .get(`${URLs.MAIN_URL}/${resource}`, { params })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -15,7 +15,7 @@ const getAll = (resource, params) => {
 /** @param {string} id */
 const getSingle = (resource, id) => {
   return axios
-    .get(`${URLs.BASE_URL}/${resource}/${id}`)
+    .get(`${URLs.MAIN_URL}/${resource}/${id}`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -24,7 +24,7 @@ const getSingle = (resource, id) => {
 /** @param {object} model */
 const post = (resource, model) => {
   return axios
-    .post(`${URLs.BASE_URL}/${resource}`, model)
+    .post(`${URLs.MAIN_URL}/${resource}`, model)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -33,7 +33,7 @@ const post = (resource, model) => {
 /** @param {object} model */
 const put = (resource, model) => {
   return axios
-    .put(`${URLs.BASE_URL}/${resource}`, model)
+    .put(`${URLs.MAIN_URL}/${resource}`, model)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -42,7 +42,7 @@ const put = (resource, model) => {
 /** @param {object} model */
 const patch = (resource, model) => {
   return axios
-    .patch(`${URLs.BASE_URL}/${resource}`, model)
+    .patch(`${URLs.MAIN_URL}/${resource}`, model)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -51,7 +51,7 @@ const patch = (resource, model) => {
 /** @param {string} id */
 const remove = (resource, id) => {
   return axios
-    .delete(`${URLs.BASE_URL}/${resource}`, id)
+    .delete(`${URLs.MAIN_URL}/${resource}`, id)
     .then(handleResponse)
     .catch(handleError);
 };
