@@ -79,7 +79,13 @@ export const areaChartOptions = {
         },
         ticks: {
           beginAtZero: true,
+          stepSize: 20,
           padding: 20,
+          labelString: 'ETB',
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'in ETB',
         },
       },
     ],
