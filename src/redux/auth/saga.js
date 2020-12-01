@@ -26,30 +26,30 @@ import {
 } from '../../constants/defaultValues';
 import { setCurrentUser } from '../../helpers/Utils';
 import { apiAuth } from '../../services/api/auth';
+import { setAxiosToken } from '../../services/api/core';
+import { UserRole } from '../../helpers/authHelper';
 
 export function* watchLoginUser() {
   yield takeEvery(LOGIN_USER, loginWithEmailPassword);
 }
 
-const loginWithEmailPasswordAsync = (email, password) =>
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .then((user) => user)
-    .catch((error) => error);
-
 function* loginWithEmailPassword({ payload }) {
   const { email, password } = payload.user;
   const { history } = payload;
   try {
-    const loginUser = yield call(loginWithEmailPasswordAsync, email, password);
+    const loginResponse = yield call(apiAuth.login, email, password);
+    console.log(loginResponse);
     // const loginUser = yield call(apiAuth.login, email, password);
-    if (!loginUser.message) {
-      const item = { uid: loginUser.user.uid, ...currentUser };
-      setCurrentUser(item);
-      yield put(loginUserSuccess(item));
-      history.push(providerRoot);
+    if (loginResponse.success) {
+      const { token, user_info } = loginResponse.data;
+      setCurrentUser(user_info, token);
+      setAxiosToken(token);
+      yield put(loginUserSuccess(user_info));
+      const destURL =
+        user_info.role == UserRole.Admin ? adminRoot : providerRoot;
+      history.push(destURL);
     } else {
-      yield put(loginUserError(loginUser.message));
+      yield put(loginUserError(loginResponse.message));
     }
   } catch (error) {
     yield put(loginUserError(error));
@@ -93,8 +93,8 @@ export function* watchLogoutUser() {
 }
 
 const logoutAsync = async (history) => {
-  await auth
-    .signOut()
+  await apiAuth
+    .logout()
     .then((user) => user)
     .catch((error) => error);
   history.push(adminRoot);
