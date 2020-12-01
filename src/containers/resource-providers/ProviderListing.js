@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row } from 'reactstrap';
-import Pagination from './Pagination';
+import Pagination from '../common/Pagination';
 import ContextMenuContainer from './ContextMenuContainer';
 import AuthorThumbListView from './AuthorThumbListView';
 import CompanyListView from './CompanyListView';
