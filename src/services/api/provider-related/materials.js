@@ -36,6 +36,13 @@ apiMaterials.getAllTags = () => {
     .catch(handleError);
 };
 
+apiMaterials.getRatings = (id, params) => {
+  return axios
+    .get(`${URLs.PROVIDERS_URL}/${url}/${id}/ratings`, { params })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 // const apiMaterialsCommon = { addMaterial };
 
 export default apiMaterials;

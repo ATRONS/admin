@@ -14,7 +14,7 @@ const apiProviders = new ApiCore({
   getAll: true,
   getSingle: true,
   post: true,
-  put: false,
+  put: true,
   patch: true,
   delete: false,
   url: url,
