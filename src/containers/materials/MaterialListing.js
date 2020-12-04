@@ -13,14 +13,18 @@ const MaterialListing = ({
 }) => {
   return (
     <Row>
-      {items.map((item) => {
-        if (displayMode === 'imagelist') {
-          return <ResourceImageListView key={item.id} resource={item} />;
-        }
-        if (displayMode === 'thumblist') {
-          return <MaterialListView key={item.id} material={item} />;
-        }
-      })}
+      {items.length ? (
+        items.map((item) => {
+          if (displayMode === 'imagelist') {
+            return <ResourceImageListView key={item.id} resource={item} />;
+          }
+          if (displayMode === 'thumblist') {
+            return <MaterialListView key={item.id} material={item} />;
+          }
+        })
+      ) : (
+        <h4>There are no materials</h4>
+      )}
       <Pagination
         currentPage={currentPage}
         totalPage={totalPage}

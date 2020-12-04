@@ -8,6 +8,7 @@ import Rating from '../../components/common/Rating';
 
 const MaterialListView = ({ material, isSelect, collect, onCheckItem }) => {
   const materialDetailUrl = 'materials/' + (material.id || material._id);
+  console.log('mater', material);
   return (
     <Colxx xxs="12" key={material._id} className="mb-3">
       <Card
@@ -18,7 +19,8 @@ const MaterialListView = ({ material, isSelect, collect, onCheckItem }) => {
         <NavLink to={materialDetailUrl} className="d-flex">
           <img
             alt={material.title}
-            src={'/assets/img/products/marble-cake-thumb.jpg'}
+            src={material.cover_img_url}
+            style={{ minWidth: '80px' }}
             className="list-thumbnail responsive border-0 card-img-left"
           />
         </NavLink>
