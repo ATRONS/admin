@@ -44,13 +44,22 @@ const MaterialDetails = ({ match, intl, type }) => {
     const id = match.params.id;
     apiMaterials.getSingle(id).then((res) => {
       if (res.success) {
-        const data = res.data.material;
+        const data = res.data;
+
         data.cover_img_url = urls.MAIN_URL + data.cover_img_url;
         setDetails(data);
         setLoading(false);
       }
     });
   }, []);
+
+  const loadComments = (pageIndex) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(comments);
+      }, 2000);
+    });
+  };
 
   return (
     <>
@@ -72,18 +81,8 @@ const MaterialDetails = ({ match, intl, type }) => {
                   <IntlMessages id="pages.actions" />
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem header>
-                    <IntlMessages id="pages.header" />
-                  </DropdownItem>
-                  <DropdownItem disabled>
+                  <DropdownItem disbled>
                     <IntlMessages id="pages.delete" />
-                  </DropdownItem>
-                  <DropdownItem>
-                    <IntlMessages id="pages.another-action" />
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                    <IntlMessages id="pages.another-action" />
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
@@ -106,70 +105,36 @@ const MaterialDetails = ({ match, intl, type }) => {
               </Colxx>
 
               <Colxx xxs="12" lg="8">
-                <Nav tabs className="separator-tabs ml-0 mb-5">
-                  <NavItem>
-                    <NavLink
-                      location={{}}
-                      to="#"
-                      className={classnames({
-                        active: activeTab === 'details',
-                        'nav-link': true,
-                      })}
-                      onClick={() => setActiveTab('details')}
-                    >
-                      <IntlMessages id="pages.details" />
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      location={{}}
-                      to="#"
-                      className={classnames({
-                        active: activeTab === 'orders',
-                        'nav-link': true,
-                      })}
-                      onClick={() => setActiveTab('transactions')}
-                    >
-                      <IntlMessages id="pages.orders" />
-                    </NavLink>
-                  </NavItem>
-                </Nav>
+                <Row>
+                  <Colxx xxs="4" className="mb-4">
+                    <Card className="dashboard-small-chart-analytics">
+                      <CardBody>
+                        <SmallLineChart data={smallChartData1} />
+                      </CardBody>
+                    </Card>
+                  </Colxx>
+                  <Colxx xxs="4" className="mb-4">
+                    <Card className="dashboard-small-chart-analytics">
+                      <CardBody>
+                        <SmallLineChart data={smallChartData2} />
+                      </CardBody>
+                    </Card>
+                  </Colxx>
 
-                <TabContent activeTab={activeTab}>
-                  <TabPane tabId="details">
-                    <Row>
-                      <Colxx xxs="4" className="mb-4">
-                        <Card className="dashboard-small-chart-analytics">
-                          <CardBody>
-                            <SmallLineChart data={smallChartData1} />
-                          </CardBody>
-                        </Card>
-                      </Colxx>
-                      <Colxx xxs="4" className="mb-4">
-                        <Card className="dashboard-small-chart-analytics">
-                          <CardBody>
-                            <SmallLineChart data={smallChartData2} />
-                          </CardBody>
-                        </Card>
-                      </Colxx>
+                  <Colxx xxs="4" className="mb-4">
+                    <Card className="dashboard-small-chart-analytics">
+                      <CardBody>
+                        <SmallLineChart data={smallChartData2} />
+                      </CardBody>
+                    </Card>
+                  </Colxx>
+                </Row>
 
-                      <Colxx xxs="4" className="mb-4">
-                        <Card className="dashboard-small-chart-analytics">
-                          <CardBody>
-                            <SmallLineChart data={smallChartData2} />
-                          </CardBody>
-                        </Card>
-                      </Colxx>
-                    </Row>
-
-                    <NewComments
-                      className="mb-4"
-                      comments={comments}
-                      displayRate
-                    />
-                  </TabPane>
-                  <TabPane tabId="transactions">Lela</TabPane>
-                </TabContent>
+                <NewComments
+                  className="mb-4"
+                  fetchData={loadComments}
+                  displayRate
+                />
               </Colxx>
             </Row>
           </Colxx>

@@ -1,22 +1,9 @@
 import React from 'react';
 import { Row } from 'reactstrap';
 import { Colxx } from '../../components/common/CustomBootstrap';
+import { extractSellsData } from '../../helpers/sales';
 import IconCardsCarousel from '../common/IconCardsCarousel';
 import SalesChartCard from '../common/SalesChartCard';
-
-const extractSellsData = (data) => {
-  const labels = Array(data.length);
-  const values = Array(data.length);
-
-  let currentRow;
-  for (let i = 0; i < data.length; i++) {
-    currentRow = data[i];
-    labels[i] = `${currentRow._id.day} - ${currentRow._id.month}`;
-    values[i] = currentRow.total_amount;
-  }
-  console.log(values);
-  return { labels, values };
-};
 
 const parseSummaryReports = (data) => {
   return [

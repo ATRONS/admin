@@ -14,11 +14,6 @@ import IntlMessages from '../../helpers/IntlMessages';
 import ApplicationMenu from '../../components/common/ApplicationMenu';
 import { getTodoListWithFilter } from '../../redux/actions';
 
-// 'request.all_requests': 'All Requests',
-// 'request.pending_requests': 'Pending Requests',
-// 'request.accepted_requests': 'Accepted Request',
-// 'request.denied_requests': 'Denied Request',
-
 const groupBy = function (xs, key) {
   let curKey;
   return xs.reduce(function (rv, x) {
@@ -31,8 +26,7 @@ const groupBy = function (xs, key) {
 const ProviderRequestsMenu = ({
   requests,
   filter,
-  allTodoItems,
-  loaded,
+  requestCounts,
   labels,
   categories,
   onFilterChange,
@@ -41,7 +35,7 @@ const ProviderRequestsMenu = ({
     onFilterChange(column, value);
   };
 
-  const counts = groupBy(requests, 'status');
+  // const counts = groupBy(requests, 'status');
 
   return (
     <ApplicationMenu>
@@ -54,10 +48,14 @@ const ProviderRequestsMenu = ({
           </p>
           <ul className="list-unstyled mb-5">
             <NavItem className={classnames({ active: !filter.status })}>
-              <NavLink to="#" onClick={() => addFilter('', '')} location={{}}>
+              <NavLink
+                to="#"
+                onClick={() => addFilter('status', '')}
+                location={{}}
+              >
                 <i className="simple-icon-reload" />
                 <IntlMessages id="request.all_requests" />
-                <span className="float-right">{loaded && requests.length}</span>
+                <span className="float-right">{requestCounts.all}</span>
               </NavLink>
             </NavItem>
 
@@ -74,7 +72,7 @@ const ProviderRequestsMenu = ({
                 <i className="simple-icon-refresh" />
                 <IntlMessages id="request.pending_requests" />
                 <span className="float-right">
-                  {(loaded && counts.pending) || 0}
+                  {requestCounts.pending || 0}
                 </span>
               </NavLink>
             </NavItem>
@@ -91,7 +89,7 @@ const ProviderRequestsMenu = ({
                 <i className="simple-icon-check" />
                 <IntlMessages id="request.accepted_requests" />
                 <span className="float-right">
-                  {(loaded && counts.accepted) || 0}
+                  {requestCounts.accepted || 0}
                 </span>
               </NavLink>
             </NavItem>
@@ -108,9 +106,7 @@ const ProviderRequestsMenu = ({
               >
                 <i className="simple-icon-close" />
                 <IntlMessages id="request.denied_requests" />
-                <span className="float-right">
-                  {(loaded && counts.denied) || 0}
-                </span>
+                <span className="float-right">{requestCounts.denied || 0}</span>
               </NavLink>
             </NavItem>
           </ul>
@@ -121,16 +117,15 @@ const ProviderRequestsMenu = ({
             {categories.map((c, index) => {
               return (
                 <NavItem key={index}>
-                  <div onClick={() => addFilter('category', c)}>
+                  <div onClick={() => addFilter('category', c.value)}>
                     <div className="custom-control custom-radio">
                       <input
                         type="radio"
                         className="custom-control-input"
-                        defaultChecked={
-                          filter && filter.category === c.toLocaleLowerCase()
-                        }
+                        checked={filter && filter.category === c.value}
+                        onChange={() => {}}
                       />
-                      <label className="custom-control-label">{c}</label>
+                      <label className="custom-control-label">{c.label}</label>
                     </div>
                   </div>
                 </NavItem>
