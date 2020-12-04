@@ -82,9 +82,9 @@ export const providerMenuItems = [
     // roles: [UserRole.Admin, UserRole.Editor],
   },
   {
-    id: 'menu.Reports',
+    id: 'menu.reports',
     icon: 'iconsminds-three-arrow-fork',
-    label: 'menu.Reports',
+    label: 'menu.reports',
     to: `${providerRoot}/reports`,
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
@@ -101,14 +101,8 @@ export const providerMenuItems = [
         // roles: [UserRole.Admin],
       },
       {
-        icon: 'simple-icon-basket-loaded',
-        label: 'menu.overView',
-        to: `${providerRoot}/reports/overview`,
-        // roles: [UserRole.Editor],
-      },
-      {
         icon: 'simple-icon-doc',
-        label: 'menu.transaction_reports',
+        label: 'menu.transactions',
         to: `${providerRoot}/reports/transactions`,
         // roles: [UserRole.Editor],
       },
