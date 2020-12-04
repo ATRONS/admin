@@ -42,6 +42,9 @@ function* loginWithEmailPassword({ payload }) {
     // const loginUser = yield call(apiAuth.login, email, password);
     if (loginResponse.success) {
       const { token, user_info } = loginResponse.data;
+      user_info.legalName = user_info.legal_name;
+      user_info.isCompany = user_info.is_company;
+      console.log('fffss', user_info);
       setCurrentUser(user_info, token);
       setAxiosToken(token);
       yield put(loginUserSuccess(user_info));
@@ -97,7 +100,7 @@ const logoutAsync = async (history) => {
     .logout()
     .then((user) => user)
     .catch((error) => error);
-  history.push(adminRoot);
+  // history.push(adminRoot);
 };
 
 function* logout({ payload }) {
