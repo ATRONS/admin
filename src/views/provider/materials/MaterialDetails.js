@@ -51,28 +51,48 @@ const MaterialDetails = ({ match, type = 'book' }) => {
     });
   }, []);
 
+  const loadComments = async (pageIndex) => {
+    const id = match.params.id;
+    try {
+      let res = await apiMaterials.getRatings(id, { page: pageIndex });
+      if (res.success) {
+        const newComments = res.data.ratings.map(
+          ({ value: rating, description: content, reader }) => ({
+            rating,
+            content,
+            reviewerName: `${reader.firstname} ${reader.lastname}`,
+          })
+        );
+
+        return newComments;
+      }
+    } catch (error) {
+      return [];
+    }
+  };
+
   let summaries = null;
   if (details) {
-    const reports = details.reports || {
-      totalEarning: 74, // total earnings will represent sells plus renting
-      totalSells: 89, // number of sold copies
-      totalDownloads: 125, // number of downlaods
-    };
+    const {
+      downloads,
+      total_earnings: totalEarnings,
+      total_sells: totalSells,
+    } = details.reports;
     summaries = [
       {
         title: 'reporting.total_earning',
         icon: 'iconsminds-basket-coins',
-        value: 'ETB ' + reports.totalEarning,
+        value: 'ETB ' + totalEarnings,
       },
       {
         title: 'reporting.total_sells',
         icon: 'iconsminds-arrow-refresh',
-        value: reports.totalSells,
+        value: totalSells,
       },
       {
         title: 'reporting.total_downloads',
         icon: 'iconsminds-mail-read',
-        value: reports.totalDownloads,
+        value: downloads,
       },
     ];
   }
@@ -135,7 +155,11 @@ const MaterialDetails = ({ match, type = 'book' }) => {
 
                 <MaterialSalesAreaChart className="mb-4" />
 
-                <NewComments className="mb-4" comments={comments} displayRate />
+                <NewComments
+                  className="mb-4"
+                  fetchData={loadComments}
+                  displayRate
+                />
               </Colxx>
             </Row>
           </Colxx>
