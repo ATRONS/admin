@@ -7,6 +7,7 @@ import MaterialListing from '../../../containers/materials/MaterialListing';
 import { Row } from 'reactstrap';
 import { Colxx } from '../../../components/common/CustomBootstrap';
 import { books_dummy } from '../../../data/book';
+import urls from '../../../services/api/urls';
 const orderOptions = [
   { column: 'title', label: 'Product Name' },
   { column: 'category', label: 'Category' },
@@ -20,7 +21,7 @@ const MaterialListingPage = ({ match }) => {
 
   const [displayMode, setDisplayMode] = useState('thumblist');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedPageSize, setSelectedPageSize] = useState(2);
+  const [selectedPageSize, setSelectedPageSize] = useState(pageSizes[0]);
   const [selectedOrderOption, setSelectedOrderOption] = useState({
     column: 'title',
     label: 'Product Name',
@@ -34,26 +35,28 @@ const MaterialListingPage = ({ match }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage, selectedPageSize]);
 
-  const fetchData = React.useCallback(() => {
+  const fetchData = () => {
     const fetchId = ++fetchIdRef.current;
     setLoading(true);
     if (fetchId === fetchIdRef.current) {
       const startRow = selectedPageSize * (currentPage - 1);
-      const endRow = startRow + selectedPageSize;
       apiMaterials
         .getAll({
-          start: startRow,
+          startRow,
           size: selectedPageSize,
           search,
         })
         .then((res) => {
           if (res.success) {
-            const newBooks = res.data.materials;
-            console.log('Fetching', startRow, endRow);
+            let newBooks = res.data.materials;
+            newBooks = newBooks.map((newBook) => {
+              newBook.cover_img_url = urls.MAIN_URL + newBook.cover_img_url;
+              return newBook;
+            });
 
-            setMaterials(newBooks.slice(startRow, endRow));
+            setMaterials(newBooks);
             setTotalPage(
               Math.ceil(res.data.total_materials / selectedPageSize)
             );
@@ -61,20 +64,7 @@ const MaterialListingPage = ({ match }) => {
           setLoading(false);
         });
     }
-  }, []);
-
-  // const fetchData = React.useCallback(() => {
-  //   const fetchId = ++fetchIdRef.current;
-  //   setLoading(true);
-  //   if (fetchId === fetchIdRef.current) {
-  //     const startRow = selectedPageSize * (currentPage - 1);
-  //     const endRow = startRow + selectedPageSize;
-
-  //     setMaterials(books_dummy);
-  //     setTotalPage(Math.ceil(books_dummy.length / selectedPageSize));
-  //   }
-  //   setLoading(false);
-  // }, []);
+  };
 
   const startIndex = (currentPage - 1) * selectedPageSize;
   const endIndex = currentPage * selectedPageSize;
@@ -82,7 +72,7 @@ const MaterialListingPage = ({ match }) => {
   return (
     <div className="materials-page-wrapper">
       <Row>
-        <Colxx xxs="10 m-auto">
+        <Colxx xxs="12">
           <MaterialListingHeading
             heading="menu.materials"
             displayMode={displayMode}

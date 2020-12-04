@@ -8,12 +8,14 @@ import { Card, CardBody } from 'reactstrap';
 import { earnings_by_material } from '../../../data/earnings';
 import IntlMessages from '../../../helpers/IntlMessages';
 import Pagination from '../../../containers/common/Pagination';
+import { CustomSpinner } from '../../../components/common/CustomSpinner';
+import { apiReports } from '../../../services/api/provider-related/report';
 
 const EarningsByMaterial = ({ match }) => {
-  const [earnings, setEarnings] = useState([]);
+  const [earnings, setEarnings] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [totalPage, setTotalPage] = useState(20);
+  const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const fetchIdRef = React.useRef(0);
   const pageSize = 5;
@@ -28,30 +30,55 @@ const EarningsByMaterial = ({ match }) => {
       const endRow = startRow + pageSize;
       setLoading(true);
 
-      setTimeout(() => {
-        setEarnings(earnings_by_material);
-        setLoading(false);
-      }, 1000);
-      // apiBooks.getAll({ startRow, pageSize, searchKeyword });
-      // apiMaterials
-      //   .getAll({
-      //     start: startRow,
-      //     size: pageSize,
-      //     type: 'BOOK',
-      //   })
-      //   .then((res) => {
-      //     if (res.success) {
-      //       const newBooks = res.data.materials;
-      //       setBooks(newBooks.slice(startRow, endRow));
-      //       setPageCount(Math.ceil(res.data.total_materials / pageSize));
-      //     }
-      //     setLoading(false);
-      //   });
+      // setTimeout(() => {
+      //   setEarnings(earnings_by_material);
+      // }, 1000);
+      apiReports
+        .earningByMaterials()
+        .then((res) => {
+          if (res.success) {
+            console.log('fina', res.data);
+
+            // const { materials, total_materials } = res.data;
+            // setTotalPage(Math.ceil(total_materials / pageSize));
+            setEarnings(res.data.materials);
+          }
+        })
+        .catch((e) => {})
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, []);
   useEffect(() => {
     fetchData();
   }, [currentPage]);
+
+  let mainContent = <CustomSpinner />;
+
+  if (!loading) {
+    if (earnings !== null) {
+      console.log('wary', earnings);
+      mainContent = earnings.length ? (
+        <tbody>
+          {earnings.map(
+            ({ _id: id, count, title, total_earning: totalEarning }) => (
+              <tr key={id}>
+                <td>{title}</td>
+                <td className="fit-content-cell text-right">{count}</td>
+                <td className="fit-content-cell text-right">
+                  ETB {totalEarning}
+                </td>
+              </tr>
+            )
+          )}
+        </tbody>
+      ) : (
+        <h4 className="mt-3">There are no earnings</h4>
+      );
+    }
+  }
+
   return (
     <div className="materials-page-wrapper">
       <Row>
@@ -60,28 +87,20 @@ const EarningsByMaterial = ({ match }) => {
           <Separator className="mb-5" />
         </Colxx>
 
-        <Colxx xxs="8">
+        <Colxx lg="8" xss="12">
           <Card className="mb-4">
             <CardBody>
               <Table>
                 <thead>
                   <tr>
                     <th>Material Name</th>
-                    <th style={{ textAlign: 'right' }}>Earning</th>
+                    <th className="fit-content-cell text-right">
+                      Number of items
+                    </th>
+                    <th className="fit-content-cell text-right">Earning</th>
                   </tr>
                 </thead>
-                {loading ? (
-                  <div className="loading" />
-                ) : (
-                  <tbody>
-                    {earnings.map(({ id, title, amount }) => (
-                      <tr key={id}>
-                        <td>{title}</td>
-                        <td style={{ textAlign: 'right' }}>ETB {amount}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
+                {mainContent}
               </Table>
 
               {totalPage > 1 && !loading && (

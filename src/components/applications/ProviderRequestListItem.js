@@ -33,9 +33,9 @@ const ProviderRequestListItem = ({ item }) => {
             </div>
           </CardBody>
         </div>
-        <div className="card-body pt-1">
+        {/* <div className="card-body pt-1">
           <p className="mb-0">{item.describtion}</p>
-        </div>
+        </div> */}
       </Card>
     </Colxx>
   );

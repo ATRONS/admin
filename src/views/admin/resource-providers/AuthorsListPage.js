@@ -60,31 +60,40 @@ const AuthorsListPage = ({ match }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [authorToDelete, setauthorToDelete] = useState(null);
 
+  const fetchData = async (restart = false, searchKey = search) => {
+    if (authorLoading) return;
+    setAuthorLoading(true);
+    apiProviders
+      .getAll({ start: 0, size: 10, legal_name: searchKey, type: 'AUTHOR' })
+      .then((res) => {
+        if (res.success) {
+          let newAuthors = [...res.data.providers, ...authors];
+          if (restart) {
+            newAuthors = res.data.providers;
+            setCurrentPage(1);
+          }
+          setAuthors(newAuthors);
+          setTotalPage(1);
+          setSelectedItems([]);
+          setTotalItemCount(newAuthors.length);
+          setIsLoaded(true);
+          setAuthorLoading(false);
+        }
+      });
+  };
+
+  const hanldeSearch = (val) => {
+    setSearch(val);
+    fetchData(true, val);
+  };
+
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedPageSize, selectedOrderOption]);
 
   useEffect(() => {
-    async function fetchData() {
-      apiProviders
-        .getAll({ start: 0, size: 10, type: 'AUTHOR' })
-        .then((res) => {
-          if (res.success) {
-            const newAuthors = [...res.data.providers, ...authors];
-            setAuthors(newAuthors);
-            setTotalPage(1);
-            setSelectedItems([]);
-            setTotalItemCount(newAuthors.length);
-            setIsLoaded(true);
-            setAuthorLoading(false);
-          }
-        });
-    }
-    if (!authorLoading) {
-      setAuthorLoading(true);
-      fetchData();
-    }
-  }, [selectedPageSize, currentPage, selectedOrderOption, search]);
+    fetchData();
+  }, [selectedPageSize, currentPage, selectedOrderOption]);
 
   const onCheckItem = (event, id) => {
     if (
@@ -204,7 +213,7 @@ const AuthorsListPage = ({ match }) => {
           itemsLength={authors ? authors.length : 0}
           onSearchKey={(e) => {
             if (e.key === 'Enter') {
-              setSearch(e.target.value.toLowerCase());
+              hanldeSearch(e.target.value.toLowerCase());
             }
           }}
           orderOptions={orderOptions}

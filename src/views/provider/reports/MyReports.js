@@ -8,9 +8,11 @@ import { Card, CardBody } from 'reactstrap';
 import { summary_earnings } from '../../../data/earnings';
 import IntlMessages from '../../../helpers/IntlMessages';
 import Pagination from '../../../containers/common/Pagination';
+import { CustomSpinner } from '../../../components/common/CustomSpinner';
+import { apiReports } from '../../../services/api/provider-related/report';
 
 const MyReports = ({ match }) => {
-  const [earningSummary, setEarningsSummary] = useState([]);
+  const [earningSummary, setEarningsSummary] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [totalPage, setTotalPage] = useState(20);
@@ -28,30 +30,98 @@ const MyReports = ({ match }) => {
       const endRow = startRow + pageSize;
       setLoading(true);
 
-      setTimeout(() => {
-        setEarningsSummary(summary_earnings);
-        setLoading(false);
-      }, 1000);
-      // apiBooks.getAll({ startRow, pageSize, searchKeyword });
-      // apiMaterials
-      //   .getAll({
-      //     start: startRow,
-      //     size: pageSize,
-      //     type: 'BOOK',
-      //   })
-      //   .then((res) => {
-      //     if (res.success) {
-      //       const newBooks = res.data.materials;
-      //       setBooks(newBooks.slice(startRow, endRow));
-      //       setPageCount(Math.ceil(res.data.total_materials / pageSize));
-      //     }
-      //     setLoading(false);
-      //   });
+      // setTimeout(() => {
+      //   setEarningsSummary(summary_earnings);
+      //   setLoading(false);
+      // }, 1000);
+      apiReports
+        .earningsSummaries({
+          startDate: '2018-10-04',
+          endDate: '2021-10-11',
+        })
+        .then((res) => {
+          if (res.success) {
+            let summaries = res.data;
+            let overallSum = 0;
+            summaries = summaries.map((daySummary) => {
+              const dailyTotal = daySummary.earnings.reduce(
+                (tempTotal, curElem) => tempTotal + curElem.earning,
+                0
+              );
+              daySummary.dailyTotal = dailyTotal;
+              overallSum += dailyTotal;
+              return daySummary;
+            });
+            summaries = { earnings: summaries, overallSum };
+            setEarningsSummary(summaries);
+            console.log('fin', summaries);
+          }
+        })
+        .catch((e) => {})
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, []);
   useEffect(() => {
     fetchData();
   }, [currentPage]);
+
+  let mainContent = <CustomSpinner />;
+  if (!loading) {
+    if (earningSummary !== null) {
+      mainContent = (
+        <tbody>
+          {earningSummary.earnings.map(
+            ({ day_label: dayLabel, earnings, dailyTotal }, id) => (
+              <React.Fragment key={dayLabel}>
+                <tr>
+                  <th colSpan={2}> {dayLabel} </th>
+                </tr>
+
+                {earnings.map(
+                  ({ title, earning, numberOfItemsSold, singlePrice }, i) => (
+                    <tr key={`${dayLabel}-${title}-${i}`}>
+                      <td style={{ width: '100%' }}>{title}</td>
+                      <td className="fit-content-cell text-right">
+                        {numberOfItemsSold}
+                      </td>
+                      <td className="fit-content-cell text-right">
+                        ETB {singlePrice}
+                      </td>
+                      <td className="fit-content-cell text-right">
+                        ETB {earning}
+                      </td>
+                    </tr>
+                  )
+                )}
+
+                <tr>
+                  <th colSpan={4} className="text-right">
+                    Total - ETB {dailyTotal}
+                  </th>
+                </tr>
+              </React.Fragment>
+            )
+          )}
+
+          <tr>
+            <th>
+              <h2>
+                <strong> Overall Total:</strong>
+              </h2>
+            </th>
+            <th colSpan={3} className="text-right">
+              <h2>
+                <strong>ETB {earningSummary.overallSum}</strong>
+              </h2>
+            </th>
+          </tr>
+        </tbody>
+      );
+    }
+  }
+
   return (
     <div className="materials-page-wrapper">
       <Row>
@@ -81,53 +151,8 @@ const MyReports = ({ match }) => {
                     <th className="fit-content-cell text-right">Amount</th>
                   </tr>
                 </thead>
-                {loading ? (
-                  <div className="loading" />
-                ) : (
-                  <tbody>
-                    {earningSummary.map(
-                      ({ date, earnings, totalAmount }, id) => (
-                        <>
-                          <tr>
-                            <th colSpan={2}> {date} </th>
-                          </tr>
-
-                          {earnings.map(
-                            ({ title, amount, itemsCount, singlePrice }) => (
-                              <tr>
-                                <td style={{ width: '100%' }}>{title}</td>
-                                <td className="fit-content-cell text-right">
-                                  {itemsCount}
-                                </td>
-                                <td className="fit-content-cell text-right">
-                                  {singlePrice}
-                                </td>
-                                <td className="fit-content-cell text-right">
-                                  {amount}
-                                </td>
-                              </tr>
-                            )
-                          )}
-
-                          <tr>
-                            <th colSpan={4} className="text-right">
-                              Total - {totalAmount}{' '}
-                            </th>
-                          </tr>
-                        </>
-                      )
-                    )}
-                  </tbody>
-                )}
+                {mainContent}
               </Table>
-
-              {totalPage > 1 && !loading && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPage={totalPage}
-                  onChangePage={setCurrentPage}
-                />
-              )}
             </CardBody>
           </Card>
         </Colxx>

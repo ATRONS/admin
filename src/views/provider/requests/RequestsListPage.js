@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   ButtonDropdown,
   CustomInput,
+  Dropdown,
 } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 
@@ -19,6 +20,7 @@ import ProviderRequestsMenu from '../../../containers/requests/ProviderRequestsM
 import ProviderRequestListItem from '../../../components/applications/ProviderRequestListItem';
 import { providerRequests } from '../../../data/requests';
 import { NavLink } from 'react-router-dom';
+import apiRequests from '../../../services/api/provider-related/requests';
 
 const labels = [
   { label: 'EDUCATION', color: 'secondary' },
@@ -26,7 +28,18 @@ const labels = [
   { label: 'PERSONAL', color: 'info' },
 ];
 
-const categories = ['Flexbox', 'Sass', 'React'];
+const categories = [
+  {
+    label: 'Paymnet',
+    value: 'payment',
+    color: 'secondary',
+  },
+  {
+    label: 'Removal',
+    value: 'removal',
+    color: 'primary',
+  },
+];
 
 const requestTypes = [
   {
@@ -44,31 +57,49 @@ const RequestsListPage = ({ match, intl }) => {
   const [displayOptionsIsOpen, setDisplayOptionsIsOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
+  const [initialDataLoaded, setInitialDataLoaded] = useState(false);
   const [requests, setRequests] = useState([]);
+
+  const [requestCounts, setRequestCounts] = useState({});
 
   const [filter, setFilter] = useState({ status: '', category: '' });
   const fetchIdRef = React.useRef(0);
 
-  const fetchRequests = React.useCallback(() => {
+  const fetchRequests = () => {
     const fetchId = ++fetchIdRef.current;
+    console.log('pp', filter);
+
     setLoading(true);
-    setTimeout(() => {
-      if (fetchId === fetchIdRef.current) {
-        const newRequests = providerRequests.filter(
-          (req) =>
-            (req.status === filter.status.toLowerCase() ||
-              filter.status === '') &&
-            (req.category === filter.category.toLowerCase() ||
-              filter.category === '')
-        );
-        setRequests(newRequests);
+    apiRequests
+      .getAll(filter)
+      .then((res) => {
+        if (res.success) {
+          if (fetchId === fetchIdRef.current) {
+            const newRequests = res.data.requests;
+            console.log('ss', newRequests);
+            setRequests(newRequests);
+
+            if (!initialDataLoaded) {
+              setInitialDataLoaded(true);
+              setRequestCounts({
+                all: 4,
+                pending: 2,
+                denied: 1,
+                accepted: 1,
+              });
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.log('Fetching requests error', error);
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    }, 1000);
-  }, []);
+      });
+  };
 
   useEffect(() => {
-    console.log('pp', filter);
     fetchRequests();
   }, [filter]);
 
@@ -79,6 +110,8 @@ const RequestsListPage = ({ match, intl }) => {
     };
   }, []);
 
+  console.log('lash', requests);
+
   return (
     <>
       <Row className="app-row survey-app">
@@ -87,20 +120,16 @@ const RequestsListPage = ({ match, intl }) => {
             <h1>
               <IntlMessages id="menu.todo" />
             </h1>
-            {loading && (
+            {initialDataLoaded && (
               <div className="text-zero top-right-button-container">
-                <ButtonDropdown
+                <Dropdown
                   isOpen={dropdownSplitOpen}
                   toggle={() => setDropdownSplitOpen(!dropdownSplitOpen)}
                 >
-                  <div className="btn btn-primary btn-lg pl-4 pr-0 top-right-button">
+                  <DropdownToggle caret color="primary">
                     <IntlMessages id="pages.add-new" />
-                  </div>
-                  <DropdownToggle
-                    caret
-                    color="primary"
-                    className="dropdown-toggle-split btn-lg"
-                  />
+                  </DropdownToggle>
+
                   <DropdownMenu right>
                     {requestTypes.map((rt) => (
                       <DropdownItem>
@@ -110,7 +139,7 @@ const RequestsListPage = ({ match, intl }) => {
                       </DropdownItem>
                     ))}
                   </DropdownMenu>
-                </ButtonDropdown>
+                </Dropdown>
               </div>
             )}
             <Breadcrumb match={match} />
@@ -129,28 +158,35 @@ const RequestsListPage = ({ match, intl }) => {
           <Separator className="mb-5" />
           <Row>
             {!loading ? (
-              requests.map((item, index) => (
-                <ProviderRequestListItem
-                  key={`todo_item_${index}`}
-                  item={item}
-                />
-              ))
+              requests.length ? (
+                requests.map((item, index) => (
+                  <ProviderRequestListItem
+                    key={`todo_item_${index}`}
+                    item={item}
+                  />
+                ))
+              ) : (
+                <h4>There are no requests</h4>
+              )
             ) : (
               <div className="loading" />
             )}
           </Row>
         </Colxx>
       </Row>
-      <ProviderRequestsMenu
-        categories={categories}
-        labels={labels}
-        requests={requests}
-        loaded={!loading}
-        filter={filter}
-        onFilterChange={(column, value) =>
-          setFilter({ ...filter, [column]: value.toLowerCase() })
-        }
-      />
+      {initialDataLoaded && (
+        <ProviderRequestsMenu
+          categories={categories}
+          labels={labels}
+          requests={requests}
+          requestCounts={requestCounts}
+          loaded={!loading}
+          filter={filter}
+          onFilterChange={(column, value) =>
+            setFilter({ ...filter, [column]: value.toLowerCase() })
+          }
+        />
+      )}
     </>
   );
 };

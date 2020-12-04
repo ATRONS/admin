@@ -10,13 +10,15 @@ import IntlMessages from '../../../helpers/IntlMessages';
 import Pagination from '../../../containers/common/Pagination';
 import { NavLink } from 'react-router-dom';
 import { ref } from 'yup';
+import { CustomSpinner } from '../../../components/common/CustomSpinner';
+import { apiReports } from '../../../services/api/provider-related/report';
 
 const TransactionHistory = ({ match }) => {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [totalPage, setTotalPage] = useState(3);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const fetchIdRef = React.useRef(0);
   const pageSize = 5;
 
@@ -29,31 +31,67 @@ const TransactionHistory = ({ match }) => {
       const startRow = pageSize * currentPage;
       const endRow = startRow + pageSize;
       setLoading(true);
-
-      setTimeout(() => {
-        setTransactions(transactions_data);
-        setLoading(false);
-      }, 1000);
-      // apiBooks.getAll({ startRow, pageSize, searchKeyword });
-      // apiMaterials
-      //   .getAll({
-      //     start: startRow,
-      //     size: pageSize,
-      //     type: 'BOOK',
-      //   })
-      //   .then((res) => {
-      //     if (res.success) {
-      //       const newBooks = res.data.materials;
-      //       setBooks(newBooks.slice(startRow, endRow));
-      //       setPageCount(Math.ceil(res.data.total_materials / pageSize));
-      //     }
-      //     setLoading(false);
-      //   });
+      apiReports
+        .transactions()
+        .then((res) => {
+          if (res.success) {
+            setTransactions(res.data);
+          }
+        })
+        .catch((err) => {})
+        .finally(() => {
+          setLoading(false);
+        });
+      // setTimeout(() => {
+      setTransactions(transactions_data);
+      setTotalPage(20 / pageSize);
+      // }, 1000);
     }
   }, []);
   useEffect(() => {
     fetchData();
   }, [currentPage]);
+
+  let mainContent = <CustomSpinner />;
+  let balanceContent = null;
+  if (!loading) {
+    if (transactions !== null) {
+      balanceContent = (
+        <h3 className="mb-3 ml-2">
+          Balance: <span className="text-primary">ETB 340</span>
+        </h3>
+      );
+      mainContent = (
+        <tbody>
+          {transactions.map(
+            (
+              { created_at, kind, description, amount, currency, _id: refId },
+              id
+            ) => (
+              <tr key={id}>
+                <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
+                  {created_at.split('T')[0]}
+                </td>
+                <td style={{ width: '1%', whiteSpace: 'nowrap' }}>{kind}</td>
+                <td>{description}</td>
+                <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
+                  {currency} {amount}
+                </td>
+                <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
+                  <NavLink to={`/somewhere/${refId}`} className="text-primary">
+                    {refId}
+                  </NavLink>
+                </td>
+              </tr>
+            )
+          )}
+        </tbody>
+      );
+    }
+  }
+
+  console.log('fine', match);
+
   return (
     <div className="materials-page-wrapper">
       <Row>
@@ -63,6 +101,7 @@ const TransactionHistory = ({ match }) => {
         </Colxx>
 
         <Colxx xxs="9">
+          {balanceContent}
           <Card className="mb-4">
             <CardBody>
               <Table>
@@ -75,42 +114,16 @@ const TransactionHistory = ({ match }) => {
                     <th>Ref Id</th>
                   </tr>
                 </thead>
-                {loading ? (
-                  <div className="loading" />
-                ) : (
-                  <tbody>
-                    {transactions.map(
-                      ({ date, type, describtion, amount, refId }, id) => (
-                        <tr key={id}>
-                          <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
-                            {date.toLocaleDateString()}
-                          </td>
-                          <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
-                            {type}
-                          </td>
-                          <td>{describtion}</td>
-                          <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
-                            {amount}
-                          </td>
-                          <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
-                            <NavLink to={`/somewhere/${refId}`}>
-                              {refId}
-                            </NavLink>
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                )}
+                {mainContent}
               </Table>
 
-              {totalPage > 1 && !loading && (
+              {/* {totalPage > 1 && !loading && (
                 <Pagination
                   currentPage={currentPage}
                   totalPage={totalPage}
                   onChangePage={setCurrentPage}
                 />
-              )}
+              )} */}
             </CardBody>
           </Card>
         </Colxx>
