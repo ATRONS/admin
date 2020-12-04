@@ -63,6 +63,16 @@ module.exports = {
   'menu.add-material': 'Add Material',
 
   'menu.materials': 'Materials',
+  'menu.reports': 'Reports',
+
+  'menu.earning_by_material': 'Earnings by material',
+  'menu.my_reports': 'My Reports',
+  'menu.overView': 'Earnings Overview',
+  'menu.transactions': 'Transactions',
+
+  'menu.requests': 'Requests',
+
+  'menu.provider': 'Provider',
 
   /* 04.Error Page */
   'pages.error-title': 'Ooops... looks like an error occurred!',
@@ -235,6 +245,7 @@ module.exports = {
   'forms.uploaded-on': 'Uploaded On',
   'forms.language': 'Language',
   'forms.author-name': 'Author',
+  'forms.amount': 'Amount',
 
   /* Reporting */
   /* 05, Dashboard Page */
@@ -246,4 +257,35 @@ module.exports = {
   'dashbaord.top_selling_magazines': 'Top Selling Magazines',
   'dashbaord.top_selling_newspapers': 'Top Selling Newspapers',
   'dashbaord.last_7_sells': 'Last Seven Day Sells',
+
+  'reporting.sales_report': 'Sales Report',
+  'reporting.this_week': 'This Week',
+  'reporting.last_week': 'Last Week',
+  'reporting.this_month': 'This month',
+  'reporting.last_quarter': 'Last quarter',
+  'reporting.this_year': 'This year',
+
+  'reporting.total_earning': 'Total Earning',
+  'reporting.total_sells': 'Total Sells',
+  'reporting.total_downloads': 'Total Downloads',
+
+  'reporting.earnings_by_materials': 'Earnings By Material',
+  'reporting.my_reports': 'My Reports',
+  'reporting.transaction_history': 'Transaction History',
+
+  'reporting.summary_reports': 'Summary Reports',
+
+  // payment
+  'payment.get_paid_now': 'Get Paid Now',
+  'payment.withdrawal_request': 'Withdraw Request',
+
+  // Request
+  'request.paymnet': 'Payment',
+  'request.material_removal': 'Material Removal',
+  'request.status': 'Request Status',
+  'request.category': 'Request Category',
+  'request.all_requests': 'All Requests',
+  'request.pending_requests': 'Pending Requests',
+  'request.accepted_requests': 'Accepted Request',
+  'request.denied_requests': 'Denied Request',
 };
