@@ -19,6 +19,7 @@ import {
   setContainerClassnames,
   clickOnMobileMenu,
   changeLocale,
+  logoutUser,
 } from '../../redux/actions';
 
 import {
@@ -47,6 +48,7 @@ const TopNav = ({
   setContainerClassnamesAction,
   clickOnMobileMenuAction,
   changeLocaleAction,
+  logoutUser,
 }) => {
   const [isInFullScreen, setIsInFullScreen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -176,6 +178,7 @@ const TopNav = ({
 
   const handleLogout = () => {
     console.log('logout');
+    logoutUser(history);
   };
 
   const menuButtonClick = (e, _clickCount, _conClassnames) => {
@@ -276,7 +279,7 @@ const TopNav = ({
         <div className="user d-inline-block">
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
-              <span className="name mr-1">{currentUser.name}</span>
+              <span className="name mr-1">{currentUser.legalName}</span>
               <span>
                 <img alt="Profile" src="/assets/img/profiles/l-1.jpg" />
               </span>
@@ -315,5 +318,6 @@ export default injectIntl(
     setContainerClassnamesAction: setContainerClassnames,
     clickOnMobileMenuAction: clickOnMobileMenu,
     changeLocaleAction: changeLocale,
+    logoutUser: logoutUser,
   })(TopNav)
 );
