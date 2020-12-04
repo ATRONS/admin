@@ -1,11 +1,21 @@
 .dropzone {
   min-height: 115px !important;
-  border: 1px solid $separator-color !important;
+  border: 1px solid $separator-color;
   background: $input-background !important;
   padding: 10px 10px !important;
   border-radius: $border-radius !important;
   color: $primary-color !important;
   height: auto !important;
+  width: fit-content;
+
+  &.profile-pic{
+    border: 1px dashed $separator-color !important;
+    .img-thumbnail {
+      height: 100px !important;
+      width: 100px !important;
+      object-fit: cover !important;
+    }
+  }
 
   .img-thumbnail {
     height: 58px !important;
@@ -22,7 +32,13 @@
   margin: 0;
 }
 
-.dropzone .dz-preview.dz-image-preview,
+.dropzone .dz-preview.dz-image-preview{
+  height: auto !important;
+  border: 0px solid !important;
+  width:  auto !important;
+}
+
+.dropzone .dz-preview,
 .dropzone .dz-preview.dz-file-preview {
   width: 260px;
   height: 60px;
