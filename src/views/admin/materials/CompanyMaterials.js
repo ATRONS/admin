@@ -6,47 +6,48 @@ import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import { FormattedDate, injectIntl } from 'react-intl';
 import { Card, CardBody } from 'reactstrap';
 
+import products from '../../../data/products';
 import { NavLink } from 'react-router-dom';
 import MyTable from '../../../containers/materials/common-table';
-import { books_dummy } from '../../../data/book';
-import apiMaterials, { loadAll } from '../../../services/api/materials';
-import { apiBooks } from '../../../services/api';
+import apiMaterials from '../../../services/api/materials';
 import Rating from '../../../components/common/Rating';
 
-const Books = ({ match }) => {
-  const [] = useState('');
-  const [books, setBooks] = useState([]);
+const CompanyMaterials = ({ match, type }) => {
+  const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
 
+  useEffect(() => {
+    setMaterials([]);
+  }, [type]);
+
   const fetchData = React.useCallback(
-    ({ pageSize, pageIndex, searchKeyword = '' }) => {
-      console.log('Fetching');
+    ({ pageSize, pageIndex, materialType, searchKeyword = '' }) => {
+      console.log('who', materialType);
       const fetchId = ++fetchIdRef.current;
       setLoading(true);
-      // loadAll();
-      // Only update the data if this is the latest fetch
-      if (fetchId === fetchIdRef.current) {
-        const startRow = pageSize * pageIndex;
-        const endRow = startRow + pageSize;
-        // apiBooks.getAll({ startRow, pageSize, searchKeyword });
-        apiMaterials
-          .getAll({
-            start: startRow,
-            size: pageSize,
-            search: searchKeyword,
-            type: 'BOOK',
-          })
-          .then((res) => {
-            if (res.success) {
-              const newBooks = res.data.materials;
-              setBooks(newBooks.slice(startRow, endRow));
-              setPageCount(Math.ceil(res.data.total_materials / pageSize));
-            }
-            setLoading(false);
-          });
-      }
+      setTimeout(() => {
+        if (fetchId === fetchIdRef.current) {
+          const startRow = pageSize * pageIndex;
+
+          apiMaterials
+            .getAll({
+              startRow: startRow,
+              size: pageSize,
+              search: searchKeyword,
+              type: materialType,
+            })
+            .then((res) => {
+              if (res.success) {
+                const newMagazines = res.data.materials;
+                setMaterials(newMagazines);
+                setPageCount(Math.ceil(res.data.total_materials / pageSize));
+              }
+              setLoading(false);
+            });
+        }
+      }, 1000);
     },
     []
   );
@@ -56,28 +57,21 @@ const Books = ({ match }) => {
       {
         Header: 'Title',
         accessor: 'title',
-        cellClass: 'list-item-heading w-20',
+        cellClass: 'list-item-heading ',
         Cell: (props) => {
           return (
-            <NavLink to={`books/${props.row.original._id}`}>
-              {props.value}
+            <NavLink to={`${type}/${props.row.original._id}`}>
+              {props.value} - {props.row.original.edition}
             </NavLink>
           );
         },
       },
       {
-        Header: 'Author',
-        accessor: 'provider.legal_name',
-        cellClass: 'text-muted',
-        Cell: (props) => <>{props.value}</>,
-      },
-      {
-        Header: 'ISBN',
-        accessor: 'ISBN',
+        Header: type == 'magazines' ? 'Edition' : 'Number',
+        accessor: 'edition',
         cellClass: 'text-muted ',
         Cell: (props) => <>{props.value}</>,
       },
-
       {
         Header: 'Published On',
         accessor: 'created_at',
@@ -100,14 +94,17 @@ const Books = ({ match }) => {
         ),
       },
     ],
-    []
+    [type]
   );
 
   return (
     <div className="materials-page-wrapper">
       <Row>
         <Colxx xxs="12">
-          <Breadcrumb heading="pages.books" match={match} />
+          <Breadcrumb
+            heading={type == 'magazine' ? 'pages.magazines' : 'pages.newspaper'}
+            match={match}
+          />
           <Separator className="mb-5" />
         </Colxx>
 
@@ -116,11 +113,16 @@ const Books = ({ match }) => {
             <CardBody>
               <MyTable
                 columns={cols}
-                data={books}
+                data={materials}
                 pageCount={pageCount}
                 fetchData={fetchData}
+                type={type}
                 loading={loading}
-                searchPlaceholder="pages.search-books"
+                searchPlaceholder={
+                  type == 'magazine'
+                    ? 'pages.search-magazines'
+                    : 'pages.search-newspapers'
+                }
               />
             </CardBody>
           </Card>
@@ -130,4 +132,4 @@ const Books = ({ match }) => {
   );
 };
 
-export default injectIntl(Books);
+export default injectIntl(CompanyMaterials);

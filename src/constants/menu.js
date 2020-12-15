@@ -57,6 +57,15 @@ export const adminMenuItems = [
       },
     ],
   },
+
+  {
+    id: 'menu.requests',
+    icon: 'iconsminds-three-arrow-fork',
+    label: 'menu.requests',
+    to: `${adminRoot}/requests`,
+    countVariable: 'count',
+    // roles: [UserRole.Admin, UserRole.Editor],
+  },
 ];
 
 export const providerMenuItems = [

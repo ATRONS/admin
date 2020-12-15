@@ -118,7 +118,7 @@ const AddMaterialWizard = ({ match, intl }) => {
   };
 
   const { messages } = intl;
-
+  console.log('Who', fields[0]);
   return (
     <>
       <Row>
@@ -163,7 +163,7 @@ const AddMaterialWizard = ({ match, intl }) => {
                             tags={tags}
                             onFormSubmitted={onStepFormSubmitted}
                             initialValues={fields[1] || {}}
-                            materialType={fields[0] ? fields[0].type.value : ''}
+                            materialType={fields[0] ? fields[0].type : ''}
                           />
                         </Step>
 

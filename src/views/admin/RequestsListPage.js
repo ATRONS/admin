@@ -12,15 +12,18 @@ import {
 } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 
-import IntlMessages from '../../../helpers/IntlMessages';
-import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
-import Breadcrumb from '../../../containers/navs/Breadcrumb';
+import IntlMessages from '../../helpers/IntlMessages';
+import { Colxx, Separator } from '../../components/common/CustomBootstrap';
+import Breadcrumb from '../../containers/navs/Breadcrumb';
 
-import ProviderRequestsMenu from '../../../containers/requests/ProviderRequestsMenu';
-import ProviderRequestListItem from '../../../components/applications/ProviderRequestListItem';
-import { providerRequests } from '../../../data/requests';
+import ProviderRequestsMenu from '../../containers/requests/ProviderRequestsMenu';
+import ProviderRequestListItem from '../../components/applications/ProviderRequestListItem';
+import { providerRequests } from '../../data/requests';
 import { NavLink } from 'react-router-dom';
-import apiRequests from '../../../services/api/provider-related/requests';
+import apiRequests from '../../services/api/provider-related/requests';
+import { apiProvider } from '../../services/api/main';
+import apiProviders from '../../services/api/provider';
+import { AdminRequestListItem } from '../../components/applications/AdminRequestListItem';
 
 const labels = [
   { label: 'EDUCATION', color: 'secondary' },
@@ -79,8 +82,8 @@ const RequestsListPage = ({ match, intl }) => {
     console.log('pp', filter);
 
     setLoading(true);
-    apiRequests
-      .getAll(filter)
+    apiProviders
+      .getRequests(filter)
       .then((res) => {
         if (res.success) {
           if (fetchId === fetchIdRef.current) {
@@ -108,6 +111,45 @@ const RequestsListPage = ({ match, intl }) => {
       });
   };
 
+  const acceptRequest = (id) => {
+    const newRequests = requests.map((rqst) => {
+      if (rqst._id == id) {
+        rqst.processing = true;
+      }
+      return rqst;
+    });
+
+    setRequests(newRequests);
+    apiProviders
+      .updateRequest(id, { status: 'accepted' })
+      .then((res) => {
+        if (res.success) {
+          const updatedRequest = res.data;
+          updatedRequest.processing = false;
+          const updatedRequests = requests.map((rqst) => {
+            if (rqst._id == updatedRequest._id) {
+              return updatedRequest;
+            }
+            return rqst;
+          });
+
+          console.log('maggie', updatedRequests);
+          setRequests(updatedRequests);
+        }
+      })
+      .catch((error) => {
+        console.log('Fetching requests error', error);
+        const newRequests = requests.map((rqst) => {
+          if (rqst._id == id) {
+            rqst.processing = false;
+          }
+          return rqst;
+        });
+        setRequests(newRequests);
+      })
+      .finally(() => {});
+  };
+
   useEffect(() => {
     fetchRequests();
   }, [filter]);
@@ -129,28 +171,7 @@ const RequestsListPage = ({ match, intl }) => {
             <h1>
               <IntlMessages id="menu.todo" />
             </h1>
-            {initialDataLoaded && (
-              <div className="text-zero top-right-button-container">
-                <Dropdown
-                  isOpen={dropdownSplitOpen}
-                  toggle={() => setDropdownSplitOpen(!dropdownSplitOpen)}
-                >
-                  <DropdownToggle caret color="primary">
-                    <IntlMessages id="pages.add-new" />
-                  </DropdownToggle>
 
-                  <DropdownMenu right>
-                    {requestTypes.map((rt, i) => (
-                      <DropdownItem key={i}>
-                        <NavLink to={rt.path}>
-                          <IntlMessages id={rt.lable} />
-                        </NavLink>
-                      </DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-            )}
             <Breadcrumb match={match} />
           </div>
 
@@ -169,9 +190,10 @@ const RequestsListPage = ({ match, intl }) => {
             {!loading ? (
               requests.length ? (
                 requests.map((item, index) => (
-                  <ProviderRequestListItem
+                  <AdminRequestListItem
                     key={`todo_item_${index}`}
                     item={item}
+                    acceptRequest={acceptRequest}
                   />
                 ))
               ) : (

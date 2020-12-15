@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import 'dropzone/dist/min/dropzone.min.css';
 import urls from '../../services/api/urls';
+import { getUserToken } from '../../helpers/Utils';
 
 const ReactDOMServer = require('react-dom/server');
 
@@ -11,12 +12,13 @@ const dropzoneComponentConfig = {
 };
 const dropzoneConfig = (onChange) => ({
   thumbnailHeight: 160,
-  maxFilesize: 3,
+  maxFilesize: 100,
+  acceptedFiles: '.epub',
   paramName: 'material',
   success: (data, response) => {
     console.log(response);
     if (response.success) {
-    onChange(response.data);
+      onChange(response.data);
     }
   },
   // complete: (data) => {
@@ -67,7 +69,7 @@ const dropzoneConfig = (onChange) => ({
       </a>
     </div>
   ),
-  headers: { 'My-Awesome-Header': 'header value' },
+  headers: { Authorization: getUserToken() },
 });
 
 export default class MaterialDropZone extends Component {

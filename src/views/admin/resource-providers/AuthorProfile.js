@@ -87,7 +87,7 @@ const AuthorProfile = ({ match }) => {
             <Colxx xxs="12" lg="4" className="mb-4 col-left">
               <Card className="mb-4">
                 <SingleLightbox
-                  thumb="/assets/img/profiles/1.jpg"
+                  thumb=""
                   large="/assets/img/profiles/1.jpg"
                   className="card-img-top"
                 />

@@ -4,7 +4,7 @@ const { axios } = require('../core');
 
 const paymentInitialData = () => {
   return axios
-    .get(`${URLs.MAIN_URL}/account/login`)
+    .get(`${URLs.PROVIDERS_URL}/account/login`)
     .then(handleResponse)
     .catch(handleError);
 };

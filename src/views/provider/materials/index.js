@@ -1,8 +1,10 @@
 import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import MaterialDetails from './MaterialDetails';
 
 const MaterialsListing = React.lazy(() => import('./MaterialListPage'));
+const MaterialDetails = React.lazy(() =>
+  import('../../common/MaterialDetails')
+);
 
 const Pages = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>

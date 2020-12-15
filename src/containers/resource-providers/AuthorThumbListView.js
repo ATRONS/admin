@@ -14,6 +14,7 @@ import ThumbnailImage from '../../components/cards/ThumbnailImage';
 
 const AuthorThumbListView = ({ author, isSelect, collect, onCheckItem }) => {
   const authorProfileUrl = 'authors/' + author._id;
+  // alert(author.avatarUrl);
   return (
     <Colxx xxs="12" md="6" lg="4" key={author.id}>
       <ContextMenuTrigger id="menu_id" data={author.id} collect={collect}>
@@ -28,7 +29,10 @@ const AuthorThumbListView = ({ author, isSelect, collect, onCheckItem }) => {
               rounded
               small
               alt={author.title}
-              src="http://localhost:3000/assets/img/products/bebinca-thumb.jpg"
+              src={
+                author.avatarUrl ||
+                'http://localhost:3000/assets/img/products/bebinca-thumb.jpg'
+              }
               className="m-4"
             />
           </NavLink>
@@ -44,16 +48,6 @@ const AuthorThumbListView = ({ author, isSelect, collect, onCheckItem }) => {
                 <CardText className="text-muted text-small mb-2">
                   {author.total_materials}
                 </CardText>
-              </div>
-              <div className="custom-control custom-checkbox pl-1 align-self-center">
-                <CustomInput
-                  className="item-check mb-0"
-                  type="checkbox"
-                  id={`check_${author.id}`}
-                  checked={isSelect}
-                  onChange={() => {}}
-                  label=""
-                />
               </div>
             </CardBody>
           </div>

@@ -65,9 +65,11 @@ const EarningsByMaterial = ({ match }) => {
             ({ _id: id, count, title, total_earning: totalEarning }) => (
               <tr key={id}>
                 <td>{title}</td>
-                <td className="fit-content-cell text-right">{count}</td>
                 <td className="fit-content-cell text-right">
-                  ETB {totalEarning}
+                  {count ? count : 0}
+                </td>
+                <td className="fit-content-cell text-right">
+                  ETB {totalEarning ? totalEarning : 0}
                 </td>
               </tr>
             )

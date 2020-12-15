@@ -34,6 +34,7 @@ import NewComments from '../../../containers/dashboard/NewComments';
 import BasicDetailsPane from '../../../containers/common/BasicDetailsPane';
 import apiMaterials from '../../../services/api/materials';
 import urls from '../../../services/api/urls';
+import { MaterialBasicSummaryReport } from '../../../components/common/MaterialBasicSummaryReport';
 
 const MaterialDetails = ({ match, intl, type }) => {
   const [activeTab, setActiveTab] = useState('details');
@@ -96,7 +97,7 @@ const MaterialDetails = ({ match, intl, type }) => {
                   <img
                     src={details.cover_img_url || '/assets/img/details/1.jpg'}
                     alt="Detail"
-                    className="card-img-top"
+                    className="card-img-top ml-2 mr-2"
                   />
                   <CardBody>
                     <BasicDetailsPane type={type} details={details} />
@@ -106,28 +107,7 @@ const MaterialDetails = ({ match, intl, type }) => {
 
               <Colxx xxs="12" lg="8">
                 <Row>
-                  <Colxx xxs="4" className="mb-4">
-                    <Card className="dashboard-small-chart-analytics">
-                      <CardBody>
-                        <SmallLineChart data={smallChartData1} />
-                      </CardBody>
-                    </Card>
-                  </Colxx>
-                  <Colxx xxs="4" className="mb-4">
-                    <Card className="dashboard-small-chart-analytics">
-                      <CardBody>
-                        <SmallLineChart data={smallChartData2} />
-                      </CardBody>
-                    </Card>
-                  </Colxx>
-
-                  <Colxx xxs="4" className="mb-4">
-                    <Card className="dashboard-small-chart-analytics">
-                      <CardBody>
-                        <SmallLineChart data={smallChartData2} />
-                      </CardBody>
-                    </Card>
-                  </Colxx>
+                  <MaterialBasicSummaryReport reports={details.reports} />
                 </Row>
 
                 <NewComments

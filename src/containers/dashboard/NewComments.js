@@ -18,14 +18,22 @@ const NewComments = ({ className = '', displayRate = false, fetchData }) => {
   const [hasMore, setHasMore] = useState(true);
   const [pageIndex, setpageIndex] = useState(0);
 
+  const selectedPageSize = 10;
+
   const fetchComments = async () => {
     let loadingIndicator;
     try {
       loadingIndicator = pageIndex == 0 ? setLoading : setLoadingMore;
       loadingIndicator(true);
-      const newComments = await fetchData(pageIndex);
-      console.log('way', newComments);
+
+      const startRow = selectedPageSize * pageIndex;
+      const { newComments, hasMore } = await fetchData(
+        startRow,
+        selectedPageSize
+      );
+      console.log('way', hasMore);
       setComments([...comments, ...newComments]);
+      setHasMore(hasMore);
     } catch (error) {
     } finally {
       if (loadingIndicator) loadingIndicator(false);

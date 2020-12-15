@@ -16,6 +16,10 @@ const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './blank-page')
 );
 
+const RequestsListPage = React.lazy(() =>
+  import(/* webpackChunkName: "viwes-blank-page" */ './RequestsListPage')
+);
+
 const ResourceProviders = React.lazy(() => import('./resource-providers'));
 const Materials = React.lazy(() => import('./materials'));
 
@@ -43,6 +47,11 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/materials`}
               render={(props) => <Materials {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/requests`}
+              render={(props) => <RequestsListPage {...props} />}
             />
 
             {/* <ProtectedRoute

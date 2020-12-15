@@ -15,23 +15,23 @@ const parseSummaryReports = (data) => {
     {
       title: 'dashbaord.total_amount',
       icon: 'iconsminds-arrow-refresh',
-      value: 'ETB 74' + data.total_sells_amount,
+      value: 'ETB ' + data.total_earnings,
     },
     {
       title: 'dashbaord.total_books',
       icon: 'iconsminds-mail-read',
-      value: 'ETB ' + data.total_materials_count,
+      value: data.total_materials,
     },
   ];
 };
 
-const ProviderReporting = ({ data }) => {
+const ProviderReporting = ({ summary, sells_report }) => {
   return (
     <>
-      <IconCardsCarousel data={parseSummaryReports(data.summary)} />
+      <IconCardsCarousel data={parseSummaryReports(summary)} />
       <Row>
         <Colxx md="12" className="mb-4">
-          <SalesChartCard data={extractSellsData(data.sells_report)} />
+          <SalesChartCard data={extractSellsData(sells_report)} />
         </Colxx>
       </Row>
     </>

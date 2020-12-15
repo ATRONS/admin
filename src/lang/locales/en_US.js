@@ -158,6 +158,7 @@ module.exports = {
   'pages.mag_or_newspapaers': 'Newspapers or Magazines',
   'pages.search-books': 'Search books with title, ISBN and author',
   'pages.search-magazines': 'Search magazines with title, and company name',
+  'pages.search-newspapers': 'Search Newspapers with title, and company name',
   'pages.comments': 'Comments',
 
   'pages.reports': 'Reports',
@@ -260,8 +261,8 @@ module.exports = {
 
   'reporting.sales_report': 'Sales Report',
   'reporting.this_week': 'This Week',
-  'reporting.last_week': 'Last Week',
-  'reporting.this_month': 'This month',
+  'reporting.last_7_days': 'Last 7 Days',
+  'reporting.last_30_days': 'Last 30 days',
   'reporting.last_quarter': 'Last quarter',
   'reporting.this_year': 'This year',
 

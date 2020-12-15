@@ -112,7 +112,7 @@ const BookDetail = ({ match, intl }) => {
                       <img
                         src="/assets/img/details/1.jpg"
                         alt="Detail"
-                        className="card-img-top"
+                        className="card-img-top ml-2 mr-2"
                       />
                       <CardBody>
                         <p className="text-muted text-small mb-2">

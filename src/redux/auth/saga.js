@@ -28,6 +28,7 @@ import { setCurrentUser } from '../../helpers/Utils';
 import { apiAuth } from '../../services/api/auth';
 import { setAxiosToken } from '../../services/api/core';
 import { UserRole } from '../../helpers/authHelper';
+import urls from '../../services/api/urls';
 
 export function* watchLoginUser() {
   yield takeEvery(LOGIN_USER, loginWithEmailPassword);
@@ -44,6 +45,7 @@ function* loginWithEmailPassword({ payload }) {
       const { token, user_info } = loginResponse.data;
       user_info.legalName = user_info.legal_name;
       user_info.isCompany = user_info.is_company;
+      user_info.avatarUrl = urls.MAIN_URL + user_info.avatar_url;
       console.log('fffss', user_info);
       setCurrentUser(user_info, token);
       setAxiosToken(token);

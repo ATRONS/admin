@@ -12,6 +12,7 @@ import ProviderListing from '../../../containers/resource-providers/ProviderList
 import AddNewCompanyModal from '../../../containers/resource-providers/AddNewCompany';
 import { companies_Dummy } from '../../../data/companies';
 import apiProviders from '../../../services/api/provider';
+import urls from '../../../services/api/urls';
 
 const getIndex = (value, arr, prop) => {
   for (let i = 0; i < arr.length; i += 1) {
@@ -68,17 +69,32 @@ const CompaniesListPage = ({ match }) => {
   useEffect(() => {
     async function fetchData() {
       apiProviders
-        .getAll({ start: 0, size: 10, type: 'COMPANY' })
+        .getAll({
+          startRow: (currentPage - 1) * selectedPageSize,
+          size: selectedPageSize,
+          legal_name: search,
+          type: 'COMPANY',
+        })
         .then((res) => {
           if (res.success) {
-            const newCompanies = [...res.data.providers, ...companies];
+            let newCompanies = res.data.providers;
+            newCompanies = newCompanies.map((company) => {
+              company.avatarUrl = urls.MAIN_URL + company.avatar_url;
+              return company;
+            });
+
             setcompanies(newCompanies);
             setTotalPage(1);
             setSelectedItems([]);
             setTotalItemCount(newCompanies.length);
             setIsLoaded(true);
-            setcompaniesLoading(false);
+            setTotalPage(
+              Math.ceil(res.data.total_providers / selectedPageSize)
+            );
           }
+        })
+        .finally(() => {
+          setcompaniesLoading(false);
         });
     }
     if (!companiesLoading) {

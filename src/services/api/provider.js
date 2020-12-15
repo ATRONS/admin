@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { ApiCore } from './core';
 import { apiProvider } from './main';
 import { handleError, handleResponse } from './response';
 import URLs from './urls';
+const { axios } = require('./core');
 
 const url = 'users/providers';
 const plural = 'users/providers';
@@ -41,6 +41,20 @@ apiProviders.deactivate = (authorId, params) => {
   // Add custom api call logic here
   return axios
     .get(`${URLs.BASE_URL}/${single}/${authorId}/deactivate`, { params })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+apiProviders.getRequests = (filter) => {
+  return axios
+    .get(`${URLs.BASE_URL}/${url}/requests`, { params: filter })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+apiProviders.updateRequest = (id, payload) => {
+  return axios
+    .put(`${URLs.BASE_URL}/${url}/requests/${id}`, payload)
     .then(handleResponse)
     .catch(handleError);
 };

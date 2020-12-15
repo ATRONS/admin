@@ -65,7 +65,15 @@ const TransactionHistory = ({ match }) => {
         <tbody>
           {transactions.map(
             (
-              { created_at, kind, description, amount, currency, _id: refId },
+              {
+                created_at,
+                kind,
+                description,
+                amount,
+                currency,
+                tracenumber,
+                _id: refId,
+              },
               id
             ) => (
               <tr key={id}>
@@ -79,7 +87,7 @@ const TransactionHistory = ({ match }) => {
                 </td>
                 <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
                   <NavLink to={`/somewhere/${refId}`} className="text-primary">
-                    {refId}
+                    {tracenumber || refId}
                   </NavLink>
                 </td>
               </tr>

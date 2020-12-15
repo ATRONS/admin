@@ -21,6 +21,7 @@ import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import classnames from 'classnames';
 import { CustomSpinner } from '../../../components/common/CustomSpinner';
 import { apiPaymnet } from '../../../services/api/provider-related/payment';
+import apiRequests from '../../../services/api/provider-related/requests';
 
 const basicDataDummy = {
   availableBalance: 450,
@@ -45,21 +46,28 @@ const GetPaid = ({ match }) => {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    //
-    // apiPaymnet
-    //   .paymentInitialData()
-    //   .then((res) => {
-    //     setBasicData(basicDataDummy);
-    //   })
-    //   .catch((res) => {})
-    //   .finally(() => {
-    //     setBasicDataLoading(false);
-    //   });
+    apiRequests
+      .paymentInitialData()
+      .then((res) => {
+        if (res.success) {
+          const data = res.data;
+          setBasicData({
+            availableBalance: data.net_balance,
+            withdrawalFee: data.service_fee,
+            minimum: data.minimun_withdrawable_amount,
+          });
+        } else {
+        }
+      })
+      .catch((res) => {})
+      .finally(() => {
+        setBasicDataLoading(false);
+      });
 
-    setTimeout(() => {
-      setBasicData(basicDataDummy);
-      setBasicDataLoading(false);
-    }, 1000);
+    // setTimeout(() => {
+    //   setBasicData(basicDataDummy);
+    //   setBasicDataLoading(false);
+    // }, 1000);
   }, []);
 
   const setError = (error) => {
@@ -94,10 +102,17 @@ const GetPaid = ({ match }) => {
   const onsubmit = (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitted(true);
-      setSubmitting(false);
-    }, 2000);
+
+    const netAmount = amount - basicData.withdrawalFee;
+    apiRequests
+      .post({ category: 'WITHDRAWAL', amount: netAmount })
+      .then((res) => {
+        if (res.success) {
+          setSubmitted(true);
+          setSubmitting(false);
+        }
+      })
+      .catch((e) => {});
   };
 
   let mainContent = <CustomSpinner />;

@@ -41,6 +41,14 @@
     ul li {
       position: relative;
 
+      .badge {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+      }
+
       span {
         text-align: center;
         padding: 0 10px;
@@ -451,6 +459,12 @@
 
       ul li {
         position: relative;
+
+        .badge {
+          position: absolute;
+          right: 20px;
+          top: 20px;
+        }
 
         &.active:after {
           content: ' ';

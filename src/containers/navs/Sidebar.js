@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Nav, NavItem, Collapse } from 'reactstrap';
+import { Nav, NavItem, Collapse, Badge } from 'reactstrap';
 import { NavLink, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -375,6 +375,9 @@ class Sidebar extends Component {
                           >
                             <i className={item.icon} />{' '}
                             <IntlMessages id={item.label} />
+                            {item.countVariable && (
+                              <Badge color="primary">4</Badge>
+                            )}
                           </NavLink>
                         )}
                       </NavItem>

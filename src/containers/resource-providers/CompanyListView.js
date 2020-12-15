@@ -20,7 +20,10 @@ const CompanyListView = ({ company, isSelect, collect, onCheckItem }) => {
           <NavLink to={companyProfileUrl} className="d-flex">
             <img
               alt={company.legal_name}
-              src={'/assets/img/products/marble-cake-thumb.jpg'}
+              src={
+                company.avatarUrl ||
+                '/assets/img/products/marble-cake-thumb.jpg'
+              }
               className="list-thumbnail responsive border-0 card-img-left"
             />
           </NavLink>
@@ -39,16 +42,6 @@ const CompanyListView = ({ company, isSelect, collect, onCheckItem }) => {
                 {/* {company.date} */}
                 Lela tarik
               </p>
-            </div>
-            <div className="custom-control custom-checkbox pl-1 align-self-center pr-4">
-              <CustomInput
-                className="item-check mb-0"
-                type="checkbox"
-                id={`check_${company.id}`}
-                checked={isSelect}
-                onChange={() => {}}
-                label=""
-              />
             </div>
           </div>
         </Card>

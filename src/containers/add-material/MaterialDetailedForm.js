@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import { injectIntl } from 'react-intl';
 import apiProviders from '../../services/api/provider';
 import ReactAutoSuggest from '../../components/common/ReactAutoSuggest';
+import ImageUploader from '../common/ImageUploader';
 
 const selectData = [
   { label: 'Book', value: 'book', key: 0 },
@@ -58,6 +59,7 @@ const MaterialDetailedForm = ({
   tags,
 }) => {
   const { messages } = intl;
+  console.log('EEEEEE', materialType);
 
   return (
     <div className="wizard-basic-step">
@@ -121,12 +123,14 @@ const MaterialDetailedForm = ({
 
               <FormGroup>
                 <Label>{messages['forms.cover-image']}</Label>
-                <MaterialDropZone
+
+                <ImageUploader
                   name="cover_img_url"
                   onChange={(name, data) =>
                     setFieldValue('cover_img_url', data.url)
                   }
                 />
+
                 {errors.cover_img_url && touched.cover_img_url && (
                   <div className="invalid-feedback d-block">
                     {errors.cover_img_url}
@@ -148,43 +152,51 @@ const MaterialDetailedForm = ({
                 )}
               </FormGroup>
 
-              <FormGroup>
-                <Label>{messages['forms.isbn']}</Label>
-                <Field className="form-control" name="ISBN" />
-                {errors.ISBN && touched.ISBN && (
-                  <div className="invalid-feedback d-block">{errors.ISBN}</div>
-                )}
-              </FormGroup>
               {materialType === 'book' && (
-                <FormGroup>
-                  <Label>{messages['forms.synopsis']}</Label>
-                  <Field
-                    className="form-control"
-                    name="synopsis"
-                    component="textarea"
-                  />
+                <>
+                  <FormGroup>
+                    <Label>{messages['forms.isbn']}</Label>
+                    <Field className="form-control" name="ISBN" />
+                    {errors.ISBN && touched.ISBN && (
+                      <div className="invalid-feedback d-block">
+                        {errors.ISBN}
+                      </div>
+                    )}
+                  </FormGroup>
 
-                  {errors.synopsis && touched.synopsis && (
-                    <div className="invalid-feedback d-block">
-                      {errors.synopsis}
-                    </div>
-                  )}
-                </FormGroup>
+                  <FormGroup>
+                    <Label>{messages['forms.synopsis']}</Label>
+                    <Field
+                      className="form-control"
+                      name="synopsis"
+                      component="textarea"
+                    />
+
+                    {errors.synopsis && touched.synopsis && (
+                      <div className="invalid-feedback d-block">
+                        {errors.synopsis}
+                      </div>
+                    )}
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>{messages['forms.tags']}</Label>
+                    <FormikReactSelect
+                      name="tags"
+                      value={values.tags}
+                      options={tags}
+                      isMulti
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                    />
+                    {errors.tags && touched.tags && (
+                      <div className="invalid-feedback d-block">
+                        {errors.tags}
+                      </div>
+                    )}
+                  </FormGroup>
+                </>
               )}
-              <FormGroup>
-                <Label>{messages['forms.tags']}</Label>
-                <FormikReactSelect
-                  name="tags"
-                  value={values.tags}
-                  options={tags}
-                  isMulti
-                  onChange={setFieldValue}
-                  onBlur={setFieldTouched}
-                />
-                {errors.tags && touched.tags && (
-                  <div className="invalid-feedback d-block">{errors.tags}</div>
-                )}
-              </FormGroup>
 
               <FormGroup>
                 <Label>{messages['forms.pages']}</Label>

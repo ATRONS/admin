@@ -61,6 +61,8 @@ const ProviderProfile = ({ match, type }) => {
     apiProviders.getSingle(id).then((res) => {
       if (res.success) {
         console.log('res', res.data);
+        let details = res.data;
+        details.avatarUrl = urls.MAIN_URL + details.avatar_url;
         setProfileDetails(res.data);
         setLoading(false);
       }
@@ -86,6 +88,23 @@ const ProviderProfile = ({ match, type }) => {
     }
   }, [activeTab]);
 
+  let basicSummary = {};
+  if (profileDetails) {
+    const {
+      report: {
+        available_balance,
+        total_earnings,
+        total_materials,
+        total_sells,
+      },
+    } = profileDetails;
+    basicSummary = {
+      available_balance,
+      total_earnings,
+      total_materials,
+      total_sells,
+    };
+  }
   return (
     <>
       {loading ? (
@@ -123,8 +142,8 @@ const ProviderProfile = ({ match, type }) => {
               <Colxx xxs="12" lg="4" className="mb-4 col-left">
                 <Card className="mb-4">
                   <SingleLightbox
-                    thumb="/assets/img/profiles/1.jpg"
-                    large="/assets/img/profiles/1.jpg"
+                    thumb={profileDetails.avatarUrl}
+                    large={profileDetails.avatarUrl}
                     className="card-img-top"
                   />
 
@@ -173,17 +192,8 @@ const ProviderProfile = ({ match, type }) => {
                 <TabContent activeTab={activeTab}>
                   <TabPane tabId="reports">
                     <ProviderReporting
-                      data={{
-                        summary: {
-                          total_sells_amount: profileDetails.total_sells_amount,
-                          total_sells_count: profileDetails.total_sells_count,
-                          total_materials_count:
-                            profileDetails.total_materials_count,
-                          available_balance: profileDetails.available_balance,
-                        },
-
-                        sells_report: profileDetails.sells_report,
-                      }}
+                      summary={basicSummary}
+                      sells_report={profileDetails.sells_report}
                     />
                   </TabPane>
                   <TabPane tabId="materials">

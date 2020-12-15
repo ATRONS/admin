@@ -4,12 +4,14 @@ import classnames from 'classnames';
 import { injectIntl } from 'react-intl';
 
 import DatatablePagination from '../../components/DatatablePagination';
-import { Input } from 'reactstrap';
+import { Input, Spinner } from 'reactstrap';
+import { CustomSpinner } from '../../components/common/CustomSpinner';
 
 const pageSizeOptions = [5, 10, 20, 30, 40, 50];
 
 function MyTable({
   columns,
+  type,
   data,
   pageCount: totalPageCount,
   divided = false,
@@ -61,8 +63,13 @@ function MyTable({
   };
 
   const search = () => {
-    // gotoPage(0);
-    onFetchDataDebounced({ pageIndex: 0, pageSize, searchKeyword });
+    gotoPage(0);
+    onFetchDataDebounced({
+      pageIndex: 0,
+      pageSize,
+      searchKeyword,
+      materialType: type,
+    });
   };
 
   const onFetchDataDebounced = useAsyncDebounce(fetchData, 100);
@@ -70,26 +77,42 @@ function MyTable({
   // When the these table states changes, fetch new data!
   React.useEffect(() => {
     console.log('running');
-    onFetchDataDebounced({ pageIndex, pageSize, searchKeyword });
+    onFetchDataDebounced({
+      pageIndex,
+      pageSize,
+      searchKeyword,
+      materialType: type,
+    });
     console.log(pageIndex);
   }, [fetchData, pageIndex, pageSize]);
+
+  React.useEffect(() => {
+    search();
+  }, [type]);
 
   const { messages } = intl;
 
   return (
     <>
-      <div className="search">
-        <Input
-          name="searchKeyword"
-          id="searchKeyword"
-          placeholder={messages[searchPlaceholder]}
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyPress={(e) => handleSearchInputKeyPress(e)}
-        />
-        <span className="search-icon" onClick={(e) => handleSearchIconClick(e)}>
-          <i className="simple-icon-magnifier" />
-        </span>
+      <div className="d-flex flex-row">
+        <div className="search">
+          <Input
+            name="searchKeyword"
+            id="searchKeyword"
+            placeholder={messages[searchPlaceholder]}
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyPress={(e) => handleSearchInputKeyPress(e)}
+          />
+          <span
+            className="search-icon"
+            onClick={(e) => handleSearchIconClick(e)}
+          >
+            <i className="simple-icon-magnifier" />
+          </span>
+        </div>
+
+        {loading && <Spinner color="primary" className="ml-4" />}
       </div>
 
       <table
@@ -119,8 +142,6 @@ function MyTable({
         </thead>
 
         <tbody {...getTableBodyProps()}>
-          {loading && <div className="loading" />}
-
           {page.map((row) => {
             prepareRow(row);
             return (

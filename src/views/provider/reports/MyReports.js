@@ -48,8 +48,11 @@ const MyReports = ({ match }) => {
                 (tempTotal, curElem) => tempTotal + curElem.earning,
                 0
               );
+
               daySummary.dailyTotal = dailyTotal;
               overallSum += dailyTotal;
+
+              console.log('fffsss', daySummary);
               return daySummary;
             });
             summaries = { earnings: summaries, overallSum };
@@ -80,7 +83,15 @@ const MyReports = ({ match }) => {
                 </tr>
 
                 {earnings.map(
-                  ({ title, earning, numberOfItemsSold, singlePrice }, i) => (
+                  (
+                    {
+                      title,
+                      earning,
+                      number_of_items_sold: numberOfItemsSold,
+                      price: { selling: singlePrice },
+                    },
+                    i
+                  ) => (
                     <tr key={`${dayLabel}-${title}-${i}`}>
                       <td style={{ width: '100%' }}>{title}</td>
                       <td className="fit-content-cell text-right">

@@ -1,7 +1,8 @@
-import axios from 'axios';
 import { ApiCore } from './core';
+import apiRequests from './provider-related/requests';
 import { handleError, handleResponse } from './response';
 import URLs from './urls';
+const { axios } = require('./core');
 
 const url = 'materials';
 const plural = 'materials';
@@ -29,6 +30,20 @@ const addMaterial = (type, data) => {
 apiMaterials.getAllTags = () => {
   return axios
     .get(`${URLs.BASE_URL}/${url}/tags`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+apiMaterials.getRatings = (id, params) => {
+  return axios
+    .get(`${URLs.BASE_URL}/${url}/${id}/ratings`, { params })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+apiMaterials.getLastXdayEarnings = (id, params) => {
+  return axios
+    .get(`${URLs.BASE_URL}/${url}/${id}/report/lastXDays`, { params })
     .then(handleResponse)
     .catch(handleError);
 };

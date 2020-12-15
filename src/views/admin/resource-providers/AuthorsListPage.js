@@ -12,6 +12,7 @@ import { DeleteProviderModal } from '../../../containers/resource-providers/Dele
 import ProviderListing from '../../../containers/resource-providers/ProviderListing';
 import { Authors_Dummy } from '../../../data/authors';
 import apiProviders from '../../../services/api/provider';
+import urls from '../../../services/api/urls';
 
 const getIndex = (value, arr, prop) => {
   for (let i = 0; i < arr.length; i += 1) {
@@ -64,21 +65,34 @@ const AuthorsListPage = ({ match }) => {
     if (authorLoading) return;
     setAuthorLoading(true);
     apiProviders
-      .getAll({ start: 0, size: 10, legal_name: searchKey, type: 'AUTHOR' })
+      .getAll({
+        startRow: (currentPage - 1) * selectedPageSize,
+        size: selectedPageSize,
+        legal_name: searchKey,
+        type: 'AUTHOR',
+      })
       .then((res) => {
         if (res.success) {
-          let newAuthors = [...res.data.providers, ...authors];
+          let newAuthors = res.data.providers;
           if (restart) {
-            newAuthors = res.data.providers;
+            // newAuthors = res.data.providers;
             setCurrentPage(1);
           }
+
+          newAuthors = newAuthors.map((author) => {
+            author.avatarUrl = urls.MAIN_URL + author.avatar_url;
+            return author;
+          });
+
           setAuthors(newAuthors);
-          setTotalPage(1);
           setSelectedItems([]);
           setTotalItemCount(newAuthors.length);
           setIsLoaded(true);
-          setAuthorLoading(false);
+          setTotalPage(Math.ceil(res.data.total_providers / selectedPageSize));
         }
+      })
+      .finally(() => {
+        setAuthorLoading(false);
       });
   };
 
@@ -89,11 +103,12 @@ const AuthorsListPage = ({ match }) => {
 
   useEffect(() => {
     setCurrentPage(1);
+    fetchData();
   }, [selectedPageSize, selectedOrderOption]);
 
   useEffect(() => {
     fetchData();
-  }, [selectedPageSize, currentPage, selectedOrderOption]);
+  }, [currentPage]);
 
   const onCheckItem = (event, id) => {
     if (

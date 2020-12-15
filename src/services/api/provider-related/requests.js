@@ -1,4 +1,7 @@
 import { ApiCore } from '../core';
+import { handleError, handleResponse } from '../response';
+import URLs from '../urls';
+const { axios } = require('../core');
 
 const url = 'requests';
 const plural = 'requests';
@@ -18,5 +21,19 @@ const apiRequests = new ApiCore(
   },
   true
 );
+
+apiRequests.paymentInitialData = () => {
+  return axios
+    .get(`${URLs.PROVIDERS_URL}/requests/withdrawable`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+// const requestPayment = (payment) => {
+//   return axios
+//     .post(`${URLs.MAIN_URL}/account/login`)
+//     .then(handleResponse)
+//     .catch(handleError);
+// };
 
 export default apiRequests;
