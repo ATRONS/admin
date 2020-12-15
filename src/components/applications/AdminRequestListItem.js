@@ -12,6 +12,7 @@ import { NavLink } from 'react-router-dom';
 import { Colxx } from '../common/CustomBootstrap';
 import { getFormattedDate } from '../../helpers/dateHelper';
 import IntlMessages from '../../helpers/IntlMessages';
+import { formatMoney } from '../../helpers/sales';
 
 export const AdminRequestListItem = ({
   item,
@@ -81,7 +82,7 @@ export const AdminRequestListItem = ({
               <td className="fit-content-cell pr-2">
                 <strong> Amount:</strong>
               </td>
-              <td>ETB {item.amount}</td>
+              <td>{formatMoney(item.amount)}</td>
             </tr>
 
             <tr>
@@ -137,7 +138,7 @@ export const AdminRequestListItem = ({
               </p>
               {item.category === 'WITHDRAWAL' && (
                 <p className="mb-1 text-muted text-small w-xs-100 ml-4">
-                  ETB {item.amount}
+                  {formatMoney(item.amount)}
                 </p>
               )}
               <p className="mb-1 text-muted text-small w-xs-100 ml-4">

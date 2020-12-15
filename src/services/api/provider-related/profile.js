@@ -11,6 +11,14 @@ const activateAccount = (payload) => {
     .catch(handleError);
 };
 
+const initialData = () => {
+  return axios
+    .get(`${URLs.PROVIDERS_URL}/initialData`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const apiProfile = {
   activateAccount,
+  initialData,
 };

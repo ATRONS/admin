@@ -69,6 +69,7 @@ const MaterialDetails = ({ match, type = 'book', isAdmin }) => {
     try {
       const id = match.params.id;
 
+      console.log('aaatttt', apiMaterials.getLastXdayEarnings);
       let res = await apiMaterials.getLastXdayEarnings(id, { lastXDays: days });
       if (res.success) {
         return res.data;

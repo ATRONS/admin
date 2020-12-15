@@ -20,53 +20,30 @@ import apiProviders from '../../services/api/provider';
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const CompanySchema = Yup.object().shape({
-  LegalName: Yup.string()
+  legalName: Yup.string()
     .min(2, 'Too Short!')
     .max(100, 'Too Long!')
-    .required('Please enter your first name'),
+    .required("Please enter the company's legal name"),
   email: Yup.string()
     .email('Invalid email')
-    .required('Please enter your email address'),
-  about: Yup.string()
-    .min(10, 'Too Short!')
-    .max(1000, 'Too Long!')
-    .required('Please enter describtion about your company'),
-  hq_address: Yup.string()
-    .min(10, 'Too Short!')
-    .max(100, 'Too Long!')
-    .required('Please enter your address'),
+    .required('Please enter the company or admin email address'),
   phone: Yup.string()
     .matches(phoneRegExp, 'Phone number is not valid')
     .required('Office phone number is required'),
-  foundOn: Yup.date().nullable().required('Date of establishement required'),
 });
 
 const AddNewCompanyModal = ({ modalOpen, toggleModal, handleSubmit }) => {
   const onSubmit = (values, actions) => {
     console.log(values);
 
-    const {
-      LegalName,
-      displayName,
-      email,
-      foundOn,
-      phone,
-      about,
-      hq_address,
-    } = values;
+    const { legalName, displayName, email, phone } = values;
 
     const payload = {
-      legal_name: LegalName,
-      display_name: displayName,
+      legal_name: legalName,
+      display_name: displayName || legalName,
       email: email,
       phone,
-      about,
       is_company: true,
-      company_info: {
-        hq_address: hq_address,
-        founded_date: foundOn.toISOString(),
-      },
-      password: 'Dummy',
     };
 
     apiProviders.post(payload).then((res) => {
@@ -93,13 +70,10 @@ const AddNewCompanyModal = ({ modalOpen, toggleModal, handleSubmit }) => {
       <ModalBody>
         <Formik
           initialValues={{
-            LegalName: '',
+            legalName: '',
             displayName: '',
             email: '',
-            foundOn: null,
-            hq_address: '',
             phone: '',
-            about: '',
           }}
           validationSchema={CompanySchema}
           onSubmit={onSubmit}
@@ -108,10 +82,10 @@ const AddNewCompanyModal = ({ modalOpen, toggleModal, handleSubmit }) => {
             <Form className="av-tooltip tooltip-label-right">
               <FormGroup className="error-l-75">
                 <Label>Legal Name</Label>
-                <Field className="form-control" name="firstName" />
-                {errors.LegalName && touched.LegalName ? (
+                <Field className="form-control" name="legalName" />
+                {errors.legalName && touched.legalName ? (
                   <div className="invalid-feedback d-block">
-                    {errors.LegalName}
+                    {errors.legalName}
                   </div>
                 ) : null}
               </FormGroup>
@@ -133,43 +107,6 @@ const AddNewCompanyModal = ({ modalOpen, toggleModal, handleSubmit }) => {
                 <Field className="form-control" name="phone" type="tel" />
                 {errors.phone && touched.phone ? (
                   <div className="invalid-feedback d-block">{errors.phone}</div>
-                ) : null}
-              </FormGroup>
-
-              <FormGroup className="error-l-75">
-                <Label>Address</Label>
-                <Field className="form-control" name="hq_address" />
-                {errors.hq_address && touched.hq_address ? (
-                  <div className="invalid-feedback d-block">
-                    {errors.hq_address}
-                  </div>
-                ) : null}
-              </FormGroup>
-
-              <FormGroup className="error-l-100">
-                <Label className="d-block">Established</Label>
-                <FormikDatePicker
-                  name="foundOn"
-                  value={values.foundOn}
-                  onChange={setFieldValue}
-                  onBlur={setFieldTouched}
-                />
-                {errors.foundOn && touched.foundOn ? (
-                  <div className="invalid-feedback d-block">
-                    {errors.foundOn}
-                  </div>
-                ) : null}
-              </FormGroup>
-
-              <FormGroup>
-                <Label>About the author</Label>
-                <Field
-                  className="form-control"
-                  name="about"
-                  component="textarea"
-                />
-                {errors.about && touched.about ? (
-                  <div className="invalid-feedback d-block">{errors.about}</div>
                 ) : null}
               </FormGroup>
 

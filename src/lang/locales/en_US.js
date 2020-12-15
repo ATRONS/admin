@@ -258,6 +258,7 @@ module.exports = {
   'dashbaord.top_selling_magazines': 'Top Selling Magazines',
   'dashbaord.top_selling_newspapers': 'Top Selling Newspapers',
   'dashbaord.last_7_sells': 'Last Seven Day Sells',
+  'dashboard.best_sellers': 'Best Sellers',
 
   'reporting.sales_report': 'Sales Report',
   'reporting.this_week': 'This Week',
@@ -275,6 +276,13 @@ module.exports = {
   'reporting.transaction_history': 'Transaction History',
 
   'reporting.summary_reports': 'Summary Reports',
+
+  'reporting.total_materials': 'Total Materials',
+  'reporting.total_providers': 'Total Providers',
+  'reporting.total_readers': 'Total Readers',
+
+  'reporting.summary_reports': 'Summary Reports',
+  'reporting.pending_tax': 'Pending Tax',
 
   // payment
   'payment.get_paid_now': 'Get Paid Now',

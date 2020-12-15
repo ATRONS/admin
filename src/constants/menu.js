@@ -4,13 +4,13 @@ import { adminRoot, providerRoot } from './defaultValues';
 export const adminMenuItems = [
   {
     id: 'home',
-    icon: 'iconsminds-air-balloon-1',
+    icon: 'simple-icon-home',
     label: 'menu.home',
     to: `${adminRoot}/home`,
   },
   {
     id: 'resource-providers',
-    icon: 'iconsminds-three-arrow-fork',
+    icon: 'iconsminds-business-mens',
     label: 'menu.resource-providers',
     to: `${adminRoot}/resource-providers`,
     // roles: [UserRole.Admin, UserRole.Editor],
@@ -30,7 +30,7 @@ export const adminMenuItems = [
 
   {
     id: 'menu.materials',
-    icon: 'iconsminds-three-arrow-fork',
+    icon: 'iconsminds-books',
     label: 'menu.materials',
     to: `${adminRoot}/materials`,
     // roles: [UserRole.Admin, UserRole.Editor],
@@ -60,39 +60,32 @@ export const adminMenuItems = [
 
   {
     id: 'menu.requests',
-    icon: 'iconsminds-three-arrow-fork',
+    icon: 'iconsminds-letter-close',
     label: 'menu.requests',
     to: `${adminRoot}/requests`,
-    countVariable: 'count',
+    countVariable: 'pendingRequestsCount',
     // roles: [UserRole.Admin, UserRole.Editor],
   },
 ];
 
 export const providerMenuItems = [
   {
-    id: 'home',
-    icon: 'iconsminds-air-balloon-1',
-    label: 'menu.home',
-    to: `${providerRoot}/home`,
-  },
-  {
-    id: 'menu.requests',
-    icon: 'iconsminds-three-arrow-fork',
-    label: 'menu.requests',
-    to: `${providerRoot}/requests`,
-    // roles: [UserRole.Admin, UserRole.Editor],
-  },
-
-  {
     id: 'menu.materials',
-    icon: 'iconsminds-three-arrow-fork',
+    icon: 'iconsminds-books',
     label: 'menu.materials',
     to: `${providerRoot}/materials`,
     // roles: [UserRole.Admin, UserRole.Editor],
   },
   {
+    id: 'menu.requests',
+    icon: 'iconsminds-letter-close',
+    label: 'menu.requests',
+    to: `${providerRoot}/requests`,
+    // roles: [UserRole.Admin, UserRole.Editor],
+  },
+  {
     id: 'menu.reports',
-    icon: 'iconsminds-three-arrow-fork',
+    icon: 'iconsminds-line-chart-1',
     label: 'menu.reports',
     to: `${providerRoot}/reports`,
     // roles: [UserRole.Admin, UserRole.Editor],

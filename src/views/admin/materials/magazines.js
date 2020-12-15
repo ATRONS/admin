@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom';
 import MyTable from '../../../containers/materials/common-table';
 import apiMaterials from '../../../services/api/materials';
 import Rating from '../../../components/common/Rating';
+import { formatMoney } from '../../../helpers/sales';
 
 const Magazines = ({ match }) => {
   const [] = useState('');
@@ -28,7 +29,6 @@ const Magazines = ({ match }) => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
           const startRow = pageSize * pageIndex;
-          const endRow = startRow + pageSize;
 
           apiMaterials
             .getAll({
@@ -81,7 +81,7 @@ const Magazines = ({ match }) => {
         Header: 'Selling Price',
         accessor: 'price.selling',
         cellClass: 'text-muted ',
-        Cell: (props) => <>ETB {props.value}</>,
+        Cell: (props) => <>{formatMoney(props.value)}</>,
       },
 
       {

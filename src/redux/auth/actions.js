@@ -12,6 +12,8 @@ import {
   RESET_PASSWORD,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
+  INITIAL_DATA,
+  INITIAL_DATA_SUCCESS,
 } from '../actions';
 
 export const loginUser = (user, history) => ({
@@ -69,4 +71,19 @@ export const registerUserError = (message) => ({
 export const logoutUser = (history) => ({
   type: LOGOUT_USER,
   payload: { history },
+});
+
+export const loadInitialData = (role) => ({
+  type: INITIAL_DATA,
+  payload: role,
+});
+
+export const loadInitialDataSuccess = (basicData) => ({
+  type: INITIAL_DATA_SUCCESS,
+  payload: basicData,
+});
+
+export const loadInitialDataError = (message) => ({
+  type: INITIAL_DATA,
+  payload: { message },
 });

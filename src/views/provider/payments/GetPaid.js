@@ -22,6 +22,7 @@ import classnames from 'classnames';
 import { CustomSpinner } from '../../../components/common/CustomSpinner';
 import { apiPaymnet } from '../../../services/api/provider-related/payment';
 import apiRequests from '../../../services/api/provider-related/requests';
+import { formatMoney } from '../../../helpers/sales';
 
 const basicDataDummy = {
   availableBalance: 450,
@@ -81,14 +82,13 @@ const GetPaid = ({ match }) => {
       console.log('Bechegnenet', countDecimals(val));
       if (val > basicData.availableBalance) {
         setError(
-          "Amount can't be greater than ETB " + basicData.availableBalance
+          "Amount can't be greater than " +
+            formatMoney(basicData.availableBalance)
         );
       } else if (countDecimals(e.target.value) !== 2) {
         setError('Amount must be a numerical value with two decimal places');
       } else if (val < basicData.minimum) {
-        setError(
-          "Amount can't be less than ETB " + basicData.minimum.toFixed(2)
-        );
+        setError("Amount can't be less than " + formatMoney(basicData.minimum));
       } else {
         setError('');
       }
@@ -103,9 +103,8 @@ const GetPaid = ({ match }) => {
     e.preventDefault();
     setSubmitting(true);
 
-    const netAmount = amount - basicData.withdrawalFee;
     apiRequests
-      .post({ category: 'WITHDRAWAL', amount: netAmount })
+      .post({ category: 'WITHDRAWAL', amount })
       .then((res) => {
         if (res.success) {
           setSubmitted(true);
@@ -140,7 +139,7 @@ const GetPaid = ({ match }) => {
               </strong>
             </Label>
             <div>
-              <span>ETB {basicData.availableBalance}</span>
+              <span>{formatMoney(basicData.availableBalance)}</span>
             </div>
           </FormGroup>
 
@@ -168,7 +167,7 @@ const GetPaid = ({ match }) => {
               Other bank fees may apply.
             </Colxx>
             <Colxx xss={12}>
-              <strong>ETB {basicData.withdrawalFee.toFixed(2)}</strong>
+              <strong> {formatMoney(basicData.withdrawalFee)}</strong>
             </Colxx>
           </Row>
 

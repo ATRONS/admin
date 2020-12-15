@@ -12,6 +12,10 @@ import {
   RESET_PASSWORD,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
+  INITIAL_DATA,
+  INITIAL_DATA_SUCCESS,
+  INITIAL_DATA_ERROR,
+  UPDATE_PENDING_REQUEST_COUNT,
 } from '../actions';
 import { getCurrentUser } from '../../helpers/Utils';
 import { isAuthGuardActive, currentUser } from '../../constants/defaultValues';
@@ -23,6 +27,7 @@ const INIT_STATE = {
   resetPasswordCode: '',
   loading: false,
   error: '',
+  initialDataLoading: true,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -95,6 +100,26 @@ export default (state = INIT_STATE, action) => {
       };
     case LOGOUT_USER:
       return { ...state, currentUser: null, error: '' };
+
+    case INITIAL_DATA:
+      return { ...state, initialDataLoading: true, error: '' };
+
+    case INITIAL_DATA_SUCCESS:
+      return {
+        ...state,
+        initialDataLoading: false,
+        currentUser: { ...state.currentUser, ...action.payload },
+      };
+    case UPDATE_PENDING_REQUEST_COUNT: {
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          pendingRequestsCount: state.currentUser.pendingRequestsCount - 1,
+        },
+      };
+    }
+
     default:
       return { ...state };
   }

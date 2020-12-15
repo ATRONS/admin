@@ -1,13 +1,15 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AdminLayout';
 import { AddNewAuthor } from './resource-providers/AddNewAuthor';
+import { UserRole } from '../../helpers/authHelper';
+import { loadInitialData } from '../../redux/actions';
 // import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
 
-const Gogo = React.lazy(() =>
-  import(/* webpackChunkName: "viwes-gogo" */ './gogo')
+const Home = React.lazy(() =>
+  import(/* webpackChunkName: "viwes-gogo" */ './home')
 );
 const SecondMenu = React.lazy(() =>
   import(/* webpackChunkName: "viwes-second-menu" */ './second-menu')
@@ -23,57 +25,75 @@ const RequestsListPage = React.lazy(() =>
 const ResourceProviders = React.lazy(() => import('./resource-providers'));
 const Materials = React.lazy(() => import('./materials'));
 
-const App = ({ match }) => {
+const App = ({ match, loadInitialData, authUser }) => {
+  const [initialDataLoaded, setinitialDataLoaded] = useState(false);
+
+  useEffect(() => {
+    loadInitialData(UserRole.Admin);
+  }, []);
+
   return (
-    <AppLayout>
-      <div className="dashboard-wrapper">
-        <Suspense fallback={<div className="loading" />}>
-          <Switch>
-            <Redirect exact from={`${match.url}/`} to={`${match.url}/gogo`} />
-            <Route
-              path={`${match.url}/gogo`}
-              render={(props) => <Gogo {...props} />}
-            />
-            <Route
-              path={`${match.url}/second-menu`}
-              render={(props) => <SecondMenu {...props} />}
-            />
+    <>
+      {!authUser.currentUser.initialDataLoading && (
+        <AppLayout>
+          <div className="dashboard-wrapper">
+            <Suspense fallback={<div className="loading" />}>
+              <Switch>
+                <Redirect
+                  exact
+                  from={`${match.url}/`}
+                  to={`${match.url}/home`}
+                />
+                <Route
+                  path={`${match.url}/home`}
+                  render={(props) => <Home {...props} />}
+                />
+                <Route
+                  path={`${match.url}/second-menu`}
+                  render={(props) => <SecondMenu {...props} />}
+                />
 
-            <Route
-              path={`${match.url}/resource-providers`}
-              render={(props) => <ResourceProviders {...props} />}
-            />
+                <Route
+                  path={`${match.url}/resource-providers`}
+                  render={(props) => <ResourceProviders {...props} />}
+                />
 
-            <Route
-              path={`${match.url}/materials`}
-              render={(props) => <Materials {...props} />}
-            />
+                <Route
+                  path={`${match.url}/materials`}
+                  render={(props) => <Materials {...props} />}
+                />
 
-            <Route
-              path={`${match.url}/requests`}
-              render={(props) => <RequestsListPage {...props} />}
-            />
+                <Route
+                  path={`${match.url}/requests`}
+                  render={(props) => <RequestsListPage {...props} />}
+                />
 
-            {/* <ProtectedRoute
+                {/* <ProtectedRoute
                     path={`${match.url}/second-menu`}
                     component={SecondMenu}
                     roles={[UserRole.Admin]}
             /> */}
-            <Route
-              path={`${match.url}/blank-page`}
-              render={(props) => <BlankPage {...props} />}
-            />
-            <Redirect to="/error" />
-          </Switch>
-        </Suspense>
-      </div>
-    </AppLayout>
+                <Route
+                  path={`${match.url}/blank-page`}
+                  render={(props) => <BlankPage {...props} />}
+                />
+                <Redirect to="/error" />
+              </Switch>
+            </Suspense>
+          </div>
+        </AppLayout>
+      )}
+    </>
   );
 };
 
-const mapStateToProps = ({ menu }) => {
+const mapStateToProps = ({ menu, authUser }) => {
   const { containerClassnames } = menu;
-  return { containerClassnames };
+  return { containerClassnames, authUser };
 };
 
-export default withRouter(connect(mapStateToProps, {})(App));
+export default withRouter(
+  connect(mapStateToProps, {
+    loadInitialData: loadInitialData,
+  })(App)
+);

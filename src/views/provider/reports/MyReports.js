@@ -10,6 +10,7 @@ import IntlMessages from '../../../helpers/IntlMessages';
 import Pagination from '../../../containers/common/Pagination';
 import { CustomSpinner } from '../../../components/common/CustomSpinner';
 import { apiReports } from '../../../services/api/provider-related/report';
+import { formatMoney } from '../../../helpers/sales';
 
 const MyReports = ({ match }) => {
   const [earningSummary, setEarningsSummary] = useState(null);
@@ -98,10 +99,10 @@ const MyReports = ({ match }) => {
                         {numberOfItemsSold}
                       </td>
                       <td className="fit-content-cell text-right">
-                        ETB {singlePrice}
+                        {formatMoney(singlePrice)}
                       </td>
                       <td className="fit-content-cell text-right">
-                        ETB {earning}
+                        {formatMoney(earning)}
                       </td>
                     </tr>
                   )
@@ -109,7 +110,7 @@ const MyReports = ({ match }) => {
 
                 <tr>
                   <th colSpan={4} className="text-right">
-                    Total - ETB {dailyTotal}
+                    Total - {formatMoney(dailyTotal)}
                   </th>
                 </tr>
               </React.Fragment>
@@ -124,7 +125,7 @@ const MyReports = ({ match }) => {
             </th>
             <th colSpan={3} className="text-right">
               <h2>
-                <strong>ETB {earningSummary.overallSum}</strong>
+                <strong> {formatMoney(earningSummary.overallSum)}</strong>
               </h2>
             </th>
           </tr>

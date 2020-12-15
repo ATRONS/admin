@@ -1,5 +1,6 @@
 import React from 'react';
 import IconCardsCarousel from '../../containers/common/IconCardsCarousel';
+import { formatMoney } from '../../helpers/sales';
 
 export const MaterialBasicSummaryReport = ({ reports }) => {
   const {
@@ -12,7 +13,7 @@ export const MaterialBasicSummaryReport = ({ reports }) => {
     {
       title: 'reporting.total_earning',
       icon: 'iconsminds-basket-coins',
-      value: 'ETB ' + totalEarnings,
+      value: formatMoney(totalEarnings),
     },
     {
       title: 'reporting.total_sells',

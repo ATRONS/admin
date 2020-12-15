@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { handleError, handleResponse } from './response';
 import URLs from './urls';
+const { axios } = require('./core');
 
 const login = (email, password) => {
   return axios

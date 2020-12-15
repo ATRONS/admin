@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row } from 'reactstrap';
 import { Colxx } from '../../components/common/CustomBootstrap';
-import { extractSellsData } from '../../helpers/sales';
+import { extractSellsData, formatMoney } from '../../helpers/sales';
 import IconCardsCarousel from '../common/IconCardsCarousel';
 import SalesChartCard from '../common/SalesChartCard';
 
@@ -10,12 +10,12 @@ const parseSummaryReports = (data) => {
     {
       title: 'dashbaord.available_amount',
       icon: 'iconsminds-basket-coins',
-      value: 'ETB ' + data.available_balance,
+      value: formatMoney(data.available_balance),
     },
     {
       title: 'dashbaord.total_amount',
       icon: 'iconsminds-arrow-refresh',
-      value: 'ETB ' + data.total_earnings,
+      value: formatMoney(data.total_earnings),
     },
     {
       title: 'dashbaord.total_books',

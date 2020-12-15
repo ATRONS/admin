@@ -12,6 +12,7 @@ import { books_dummy } from '../../../data/book';
 import apiMaterials, { loadAll } from '../../../services/api/materials';
 import { apiBooks } from '../../../services/api';
 import Rating from '../../../components/common/Rating';
+import { formatMoney } from '../../../helpers/sales';
 
 const Books = ({ match }) => {
   const [] = useState('');
@@ -33,7 +34,7 @@ const Books = ({ match }) => {
         // apiBooks.getAll({ startRow, pageSize, searchKeyword });
         apiMaterials
           .getAll({
-            start: startRow,
+            startRow: startRow,
             size: pageSize,
             search: searchKeyword,
             type: 'BOOK',
@@ -41,7 +42,7 @@ const Books = ({ match }) => {
           .then((res) => {
             if (res.success) {
               const newBooks = res.data.materials;
-              setBooks(newBooks.slice(startRow, endRow));
+              setBooks(newBooks);
               setPageCount(Math.ceil(res.data.total_materials / pageSize));
             }
             setLoading(false);
@@ -88,7 +89,7 @@ const Books = ({ match }) => {
         Header: 'Selling Price',
         accessor: 'price.selling',
         cellClass: 'text-muted ',
-        Cell: (props) => <>ETB {props.value}</>,
+        Cell: (props) => <>{formatMoney(props.value)}</>,
       },
 
       {

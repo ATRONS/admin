@@ -14,6 +14,7 @@ import {
   changeDefaultClassnames,
   changeSelectedMenuHasSubItems,
 } from '../../redux/actions';
+import { currentUser } from '../../constants/defaultValues';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -338,6 +339,9 @@ class Sidebar extends Component {
       viewingParentMenu,
       collapsedMenus,
     } = this.state;
+
+    console.log('ssssssssseeeeeeee', this.props.currentUser);
+
     return (
       <div className="sidebar">
         <div className="main-menu">
@@ -375,9 +379,13 @@ class Sidebar extends Component {
                           >
                             <i className={item.icon} />{' '}
                             <IntlMessages id={item.label} />
-                            {item.countVariable && (
-                              <Badge color="primary">4</Badge>
-                            )}
+                            {item.countVariable &&
+                              this.props.currentUser[item.countVariable] >
+                                0 && (
+                                <Badge color="primary">
+                                  {this.props.currentUser[item.countVariable]}
+                                </Badge>
+                              )}
                           </NavLink>
                         )}
                       </NavItem>

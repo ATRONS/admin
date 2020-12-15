@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Colxx } from '../../components/common/CustomBootstrap';
 
 import { Formik, Form, Field } from 'formik';
@@ -16,6 +16,11 @@ import apiProviders from '../../services/api/provider';
 import classnames from 'classnames';
 import { apiProfile } from '../../services/api/provider-related/profile';
 import { providerRoot } from '../../constants/defaultValues';
+import { setCurrentUser } from '../../helpers/Utils';
+import { loginUserSuccess } from '../../redux/actions';
+import urls from '../../services/api/urls';
+
+const mixObjFields = (obj1, obj2) => {};
 
 // import ImageUploader from 'react-images-upload';
 const providesData = [
@@ -77,8 +82,8 @@ const getSpecificInitialState = (isCompany) => {
   };
 };
 
-const ActivateAccount = ({ currentUser, history }) => {
-  const onSubmit = (values) => {
+const ActivateAccount = ({ currentUser, history, loginUserSuccess }) => {
+  const onSubmit = (values, { setSubmitting }) => {
     console.log('Values', values);
     const {
       password,
@@ -114,16 +119,32 @@ const ActivateAccount = ({ currentUser, history }) => {
       .activateAccount(payload)
       .then((res) => {
         if (res.success) {
-          console.log(res.data);
-          history.push(providerRoot);
+          //
+          const newUserData = { ...currentUser, ...res.data };
+          setCurrentUser(newUserData);
+          loginUserSuccess(newUserData);
+          // console.log('Who', );
+          // setImmediate(() => {
+          //   history.push(providerRoot);
+          // });
         }
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setSubmitting(true);
       });
   };
   const { isCompany } = currentUser;
   // const isCompany = true
+
+  useEffect(() => {
+    if (currentUser.active) {
+      history.push(providerRoot);
+    }
+  }, [currentUser]);
+
   return (
     <>
       <Row>
@@ -324,6 +345,8 @@ const mapStateToProps = ({ authUser }) => {
   const { currentUser } = authUser;
   return { currentUser };
 };
-const mapActionsToProps = {};
+const mapActionsToProps = {
+  loginUserSuccess: loginUserSuccess,
+};
 
 export default connect(mapStateToProps, mapActionsToProps)(ActivateAccount);

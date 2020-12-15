@@ -11,3 +11,7 @@ export const extractSellsData = (data) => {
   console.log(values);
   return { labels, values };
 };
+
+export const formatMoney = (birr) => {
+  return 'ETB ' + birr.toFixed(2);
+};

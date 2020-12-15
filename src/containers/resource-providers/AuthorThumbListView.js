@@ -17,42 +17,40 @@ const AuthorThumbListView = ({ author, isSelect, collect, onCheckItem }) => {
   // alert(author.avatarUrl);
   return (
     <Colxx xxs="12" md="6" lg="4" key={author.id}>
-      <ContextMenuTrigger id="menu_id" data={author.id} collect={collect}>
-        <Card
-          onClick={(event) => onCheckItem(event, author.id)}
-          className={classnames('d-flex flex-row mb-4', {
-            active: isSelect,
-          })}
-        >
-          <NavLink to={authorProfileUrl} className="d-flex">
-            <ThumbnailImage
-              rounded
-              small
-              alt={author.title}
-              src={
-                author.avatarUrl ||
-                'http://localhost:3000/assets/img/products/bebinca-thumb.jpg'
-              }
-              className="m-4"
-            />
-          </NavLink>
-          <div className=" d-flex flex-grow-1 min-width-zero">
-            <CardBody className=" pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
-              <div className="min-width-zero">
-                <NavLink to={authorProfileUrl}>
-                  <CardSubtitle className="truncate mb-1">
-                    {author.legal_name || author.display_name}
-                  </CardSubtitle>
-                </NavLink>
+      <Card
+        onClick={(event) => onCheckItem(event, author.id)}
+        className={classnames('d-flex flex-row mb-4', {
+          active: isSelect,
+        })}
+      >
+        <NavLink to={authorProfileUrl} className="d-flex">
+          <ThumbnailImage
+            rounded
+            small
+            alt={author.title}
+            src={
+              author.avatarUrl ||
+              'http://localhost:3000/assets/img/products/bebinca-thumb.jpg'
+            }
+            className="m-4"
+          />
+        </NavLink>
+        <div className=" d-flex flex-grow-1 min-width-zero">
+          <CardBody className=" pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+            <div className="min-width-zero">
+              <NavLink to={authorProfileUrl}>
+                <CardSubtitle className="truncate mb-1">
+                  {author.legal_name || author.display_name}
+                </CardSubtitle>
+              </NavLink>
 
-                <CardText className="text-muted text-small mb-2">
-                  {author.total_materials}
-                </CardText>
-              </div>
-            </CardBody>
-          </div>
-        </Card>{' '}
-      </ContextMenuTrigger>
+              <CardText className="text-muted text-small mb-2">
+                {author.total_materials}
+              </CardText>
+            </div>
+          </CardBody>
+        </div>
+      </Card>{' '}
     </Colxx>
   );
 };

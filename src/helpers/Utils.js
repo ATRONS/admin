@@ -166,17 +166,26 @@ export const getCurrentUser = () => {
   return user;
 };
 
-export const setCurrentUser = (user, token) => {
+export const setCurrentUser = (user) => {
   try {
     if (user) {
       localStorage.setItem('current_user_data', JSON.stringify(user));
-      localStorage.setItem('user_token', token);
-      // axios.defaults.headers.common['Authorization'] = token;
     } else {
       localStorage.removeItem('current_user_data');
-      localStorage.removeItem('user_token');
     }
   } catch (error) {
     console.log('>>>>: src/helpers/Utils.js : setCurrentUser -> error', error);
+  }
+};
+
+export const setToken = (token) => {
+  try {
+    if (token) {
+      localStorage.setItem('user_token', token);
+    } else {
+      localStorage.removeItem('user_token');
+    }
+  } catch (error) {
+    console.log('>>>>: src/helpers/Utils.js : setTokenError -> error', error);
   }
 };

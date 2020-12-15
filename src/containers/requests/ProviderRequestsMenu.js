@@ -35,8 +35,6 @@ const ProviderRequestsMenu = ({
     onFilterChange(column, value);
   };
 
-  // const counts = groupBy(requests, 'status');
-
   return (
     <ApplicationMenu>
       <PerfectScrollbar

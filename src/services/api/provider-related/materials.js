@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { ApiCore } from '../core';
+import { ApiCore, axios } from '../core';
 import { handleError, handleResponse } from '../response';
 import URLs from '../urls';
 
@@ -39,6 +38,13 @@ apiMaterials.getAllTags = () => {
 apiMaterials.getRatings = (id, params) => {
   return axios
     .get(`${URLs.PROVIDERS_URL}/${url}/${id}/ratings`, { params })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+apiMaterials.getLastXdayEarnings = (id, params) => {
+  return axios
+    .get(`${URLs.PROVIDERS_URL}/${url}/${id}/report/lastXDays`, { params })
     .then(handleResponse)
     .catch(handleError);
 };

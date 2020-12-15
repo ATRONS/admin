@@ -12,6 +12,7 @@ import { NavLink } from 'react-router-dom';
 import { ref } from 'yup';
 import { CustomSpinner } from '../../../components/common/CustomSpinner';
 import { apiReports } from '../../../services/api/provider-related/report';
+import { formatMoney } from '../../../helpers/sales';
 
 const TransactionHistory = ({ match }) => {
   const [transactions, setTransactions] = useState(null);
@@ -21,6 +22,7 @@ const TransactionHistory = ({ match }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const fetchIdRef = React.useRef(0);
   const pageSize = 5;
+  const [balance, setBalance] = useState(0);
 
   const fetchData = React.useCallback(() => {
     console.log('Fetching');
@@ -35,7 +37,8 @@ const TransactionHistory = ({ match }) => {
         .transactions()
         .then((res) => {
           if (res.success) {
-            setTransactions(res.data);
+            setTransactions(res.data.transactions);
+            setBalance(res.data.balance);
           }
         })
         .catch((err) => {})
@@ -58,7 +61,7 @@ const TransactionHistory = ({ match }) => {
     if (transactions !== null) {
       balanceContent = (
         <h3 className="mb-3 ml-2">
-          Balance: <span className="text-primary">ETB 340</span>
+          Balance: <span className="text-primary">{formatMoney(balance)}</span>
         </h3>
       );
       mainContent = (
@@ -83,7 +86,7 @@ const TransactionHistory = ({ match }) => {
                 <td style={{ width: '1%', whiteSpace: 'nowrap' }}>{kind}</td>
                 <td>{description}</td>
                 <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
-                  {currency} {amount}
+                  {formatMoney(amount)}
                 </td>
                 <td style={{ width: '1%', whiteSpace: 'nowrap' }}>
                   <NavLink to={`/somewhere/${refId}`} className="text-primary">
@@ -108,7 +111,7 @@ const TransactionHistory = ({ match }) => {
           <Separator className="mb-5" />
         </Colxx>
 
-        <Colxx xxs="9">
+        <Colxx xxs="11">
           {balanceContent}
           <Card className="mb-4">
             <CardBody>

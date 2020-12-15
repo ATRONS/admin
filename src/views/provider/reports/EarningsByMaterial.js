@@ -10,6 +10,7 @@ import IntlMessages from '../../../helpers/IntlMessages';
 import Pagination from '../../../containers/common/Pagination';
 import { CustomSpinner } from '../../../components/common/CustomSpinner';
 import { apiReports } from '../../../services/api/provider-related/report';
+import { formatMoney } from '../../../helpers/sales';
 
 const EarningsByMaterial = ({ match }) => {
   const [earnings, setEarnings] = useState(null);
@@ -41,7 +42,7 @@ const EarningsByMaterial = ({ match }) => {
 
             // const { materials, total_materials } = res.data;
             // setTotalPage(Math.ceil(total_materials / pageSize));
-            setEarnings(res.data.materials);
+            setEarnings(res.data.materials || []);
           }
         })
         .catch((e) => {})
@@ -69,7 +70,7 @@ const EarningsByMaterial = ({ match }) => {
                   {count ? count : 0}
                 </td>
                 <td className="fit-content-cell text-right">
-                  ETB {totalEarning ? totalEarning : 0}
+                  {formatMoney(totalEarning ? totalEarning : 0)}
                 </td>
               </tr>
             )

@@ -87,17 +87,18 @@ const RequestsListPage = ({ match, intl }) => {
       .then((res) => {
         if (res.success) {
           if (fetchId === fetchIdRef.current) {
-            const newRequests = res.data.requests;
+            const newRequests = res.data.requests.requests;
+            const counts = res.data.counts;
             console.log('ss', newRequests);
             setRequests(newRequests);
 
             if (!initialDataLoaded) {
               setInitialDataLoaded(true);
               setRequestCounts({
-                all: 4,
-                pending: 2,
-                denied: 1,
-                accepted: 1,
+                all: counts.PENDING + counts.DENIED + counts.ACCEPTED,
+                pending: counts.PENDING,
+                denied: counts.DENIED,
+                accepted: counts.ACCEPTED,
               });
             }
           }
@@ -133,7 +134,6 @@ const RequestsListPage = ({ match, intl }) => {
             return rqst;
           });
 
-          console.log('maggie', updatedRequests);
           setRequests(updatedRequests);
         }
       })
@@ -169,7 +169,7 @@ const RequestsListPage = ({ match, intl }) => {
         <Colxx xxs="12">
           <div className="mb-2">
             <h1>
-              <IntlMessages id="menu.todo" />
+              <IntlMessages id="menu.requests" />
             </h1>
 
             <Breadcrumb match={match} />

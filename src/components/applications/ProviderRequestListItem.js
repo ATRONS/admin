@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 import { Colxx } from '../common/CustomBootstrap';
 import { getFormattedDate } from '../../helpers/dateHelper';
+import { formatMoney } from '../../helpers/sales';
 
 const requestCategories = [
   {
@@ -26,7 +27,7 @@ const ProviderRequestListItem = ({ item }) => {
             </p>
             {item.category === 'WITHDRAWAL' && (
               <p className="mb-1 text-muted text-small w-xs-100 ml-4">
-                ETB {item.amount}
+                {formatMoney(item.amount)}
               </p>
             )}
 

@@ -31,8 +31,8 @@ const validateEmail = (value) => {
 };
 
 const Login = ({ history, loading, error, loginUserAction }) => {
-  const [email] = useState('bealu@gamil.com');
-  const [password] = useState('password');
+  const [email] = useState('bealu@gmail.com');
+  const [password] = useState('mukera123');
 
   useEffect(() => {
     if (error) {

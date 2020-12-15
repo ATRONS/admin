@@ -1,4 +1,11 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import {
+  all,
+  call,
+  fork,
+  put,
+  takeEvery,
+  takeLatest,
+} from 'redux-saga/effects';
 import { auth } from '../../helpers/Firebase';
 import {
   LOGIN_USER,
@@ -6,6 +13,8 @@ import {
   LOGOUT_USER,
   FORGOT_PASSWORD,
   RESET_PASSWORD,
+  INITIAL_DATA_SUCCESS,
+  INITIAL_DATA,
 } from '../actions';
 
 import {
@@ -17,6 +26,7 @@ import {
   forgotPasswordError,
   resetPasswordSuccess,
   resetPasswordError,
+  loadInitialDataSuccess,
 } from './actions';
 
 import {
@@ -24,11 +34,14 @@ import {
   currentUser,
   providerRoot,
 } from '../../constants/defaultValues';
-import { setCurrentUser } from '../../helpers/Utils';
+import { setCurrentUser, setToken } from '../../helpers/Utils';
 import { apiAuth } from '../../services/api/auth';
 import { setAxiosToken } from '../../services/api/core';
 import { UserRole } from '../../helpers/authHelper';
 import urls from '../../services/api/urls';
+import { apiProfile } from '../../services/api/provider-related/profile';
+import { apiProfile as apiProfileAdmin } from '../../services/api/profile';
+import { date } from 'yup';
 
 export function* watchLoginUser() {
   yield takeEvery(LOGIN_USER, loginWithEmailPassword);
@@ -47,7 +60,8 @@ function* loginWithEmailPassword({ payload }) {
       user_info.isCompany = user_info.is_company;
       user_info.avatarUrl = urls.MAIN_URL + user_info.avatar_url;
       console.log('fffss', user_info);
-      setCurrentUser(user_info, token);
+      setCurrentUser(user_info);
+      setToken(token);
       setAxiosToken(token);
       yield put(loginUserSuccess(user_info));
       const destURL =
@@ -165,6 +179,29 @@ function* resetPassword({ payload }) {
   }
 }
 
+function* loadInitialDataAsync({ payload }) {
+  const loader =
+    payload === UserRole.Admin
+      ? apiProfileAdmin.initialData
+      : apiProfile.initialData;
+
+  try {
+    const initialDataResponse = yield call(loader);
+    if (initialDataResponse.success) {
+      let userInfo = initialDataResponse.data.user_info;
+      userInfo.avatarUrl = urls.MAIN_URL + userInfo.avatar_url;
+      userInfo.pendingRequestsCount =
+        initialDataResponse.data.pending_requests_count;
+
+      yield put(loadInitialDataSuccess(userInfo));
+    }
+  } catch (error) {}
+}
+
+export function* watchLoadInitialData() {
+  yield takeLatest(INITIAL_DATA, loadInitialDataAsync);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchLoginUser),
@@ -172,5 +209,6 @@ export default function* rootSaga() {
     fork(watchRegisterUser),
     fork(watchForgotPassword),
     fork(watchResetPassword),
+    fork(watchLoadInitialData),
   ]);
 }

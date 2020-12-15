@@ -128,8 +128,7 @@
   max-width: unset;
   height: 80px;
   object-fit: cover;
-  width: unset !important;
-
+  width: 60px;
   @include respond-below(md) {
     height: 80px;
   }
@@ -170,6 +169,7 @@
 
   &.xsmall {
     height: 40px;
+    width: 40px;
     font-size: 1rem;
 
     @include respond-below(md) {
